@@ -4,15 +4,33 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#07070a">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="ONI HUB">
+<meta name="format-detection" content="telephone=no">
 <meta name="description" content="ONI & KISHIN — CPM 1 anime, clean build, drift community.">
 <meta property="og:title" content="ONI & KISHIN — CPM 1">
 <meta property="og:description" content="Anime • Clean • Drift • Community">
 <meta property="og:type" content="website">
 <title>ONI & KISHIN — CPM 1</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon-192.png" sizes="192x192" type="image/png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png" sizes="180x180">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+
+<style id="oni-pwa-foundation">
+html{background:#050507}
+body{min-height:100dvh;padding-bottom:env(safe-area-inset-bottom)}
+header{padding-top:env(safe-area-inset-top)}
+header .nav{height:calc(76px + env(safe-area-inset-top))}
+.oni-pwa-splash{position:fixed;inset:0;z-index:1000001;display:grid;place-items:center;background:radial-gradient(circle at 50% 25%,rgba(255,32,51,.18),transparent 28rem),#050507;transition:opacity .35s ease,visibility .35s ease}
+.oni-pwa-splash.is-ready{opacity:0;visibility:hidden}.oni-pwa-splash-card{text-align:center}.oni-pwa-splash img{width:86px;height:86px;border-radius:24px;box-shadow:0 0 0 1px rgba(255,255,255,.1),0 18px 55px rgba(255,32,51,.22)}.oni-pwa-splash b{display:block;margin-top:15px;font-size:11px;letter-spacing:.24em}.oni-pwa-splash i{display:block;width:72px;height:2px;margin:12px auto 0;overflow:hidden;background:rgba(255,255,255,.12)}.oni-pwa-splash i:after{content:"";display:block;width:45%;height:100%;background:#ff2033;animation:oni-pwa-load 1s ease-in-out infinite}@keyframes oni-pwa-load{50%{transform:translateX(125%)}}
+.oni-pwa-prompt{position:fixed;right:max(16px,env(safe-area-inset-right));bottom:max(16px,env(safe-area-inset-bottom));z-index:1000002;width:min(360px,calc(100vw - 32px));padding:15px;border:1px solid rgba(255,255,255,.14);border-radius:18px;background:rgba(12,12,17,.96);box-shadow:0 24px 70px rgba(0,0,0,.6);display:none}.oni-pwa-prompt.show{display:flex;gap:12px;align-items:center}.oni-pwa-prompt img{width:42px;height:42px;border-radius:12px}.oni-pwa-prompt-copy{min-width:0;flex:1}.oni-pwa-prompt b{display:block;font-size:12px}.oni-pwa-prompt span{display:block;margin-top:3px;color:#a6a6b1;font-size:10px;line-height:1.35}.oni-pwa-prompt button{border:0;border-radius:10px;padding:9px 10px;background:#ff2033;color:#fff;font:inherit;font-size:10px;font-weight:900}.oni-pwa-prompt .oni-pwa-dismiss{padding:6px;background:transparent;color:#aaa;font-size:18px}@media(display-mode:standalone){.oni-pwa-prompt{display:none!important}}@media(prefers-reduced-motion:reduce){.oni-pwa-splash,.oni-pwa-splash i:after{animation:none;transition:none}}
+</style>
 
 <style>
 :root{
@@ -2863,6 +2881,9 @@ body.oni-mode .oni-radio-panel{box-shadow:0 30px 100px rgba(0,0,0,.72),0 0 90px 
 
 <body>
 
+<div class="oni-pwa-splash" id="oniPwaSplash" aria-label="ONI HUB is loading"><div class="oni-pwa-splash-card"><img src="icons/icon-192.png" alt=""><b>ONI HUB</b><i></i></div></div>
+<aside class="oni-pwa-prompt" id="oniPwaPrompt" aria-live="polite"><img src="icons/icon-192.png" alt=""><div class="oni-pwa-prompt-copy"><b id="oniPwaTitle">INSTALL ONI HUB</b><span id="oniPwaCopy">Open ONI HUB like an app.</span></div><button type="button" id="oniPwaAction">INSTALL</button><button class="oni-pwa-dismiss" type="button" id="oniPwaDismiss" aria-label="Dismiss">×</button></aside>
+
 <div class="px-progress" aria-hidden="true"><i></i></div>
 <div class="px-ambient" aria-hidden="true"><i class="px-orb a"></i><i class="px-orb b"></i><i class="px-orb c"></i></div>
 <div class="px-cursor" aria-hidden="true"></div>
@@ -4399,14 +4420,7 @@ async function aiBackend(q){
    signal:controller.signal,
    body:JSON.stringify({
     message:q,
-    history:history.slice(-18),
-    knowledge:{
-     members:D.members,
-     garage:D.garage,
-     music:D.music,
-     meet:D.meet,
-     participants:D.participants
-    }
+    history:history.slice(-10)
    })
   });
   clearTimeout(timer);
@@ -4453,5 +4467,65 @@ document.getElementById("oaMic").onclick=async()=>{
 
 add("ai","Сайн уу. Би ONI AI. Монгол хэлээр асуугаарай — clan data, Meet, Garage, Music болон navigation-д тусална.");
 sync().then(()=>add("ai","🟢 LIVE. Music control болон smart intent бэлэн."));
+</script>
+<script id="oni-pwa-runtime">
+(() => {
+  const splash = document.getElementById('oniPwaSplash');
+  const prompt = document.getElementById('oniPwaPrompt');
+  const action = document.getElementById('oniPwaAction');
+  const dismiss = document.getElementById('oniPwaDismiss');
+  const title = document.getElementById('oniPwaTitle');
+  const copy = document.getElementById('oniPwaCopy');
+  let deferredInstall;
+  const standalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+  const hidePrompt = () => prompt?.classList.remove('show');
+  const showPrompt = () => { if (!standalone && !localStorage.getItem('oniPwaDismissed')) prompt?.classList.add('show'); };
+
+  document.addEventListener('DOMContentLoaded', () => requestAnimationFrame(() => splash?.classList.add('is-ready')));
+  setTimeout(() => splash?.classList.add('is-ready'), 1800);
+  dismiss?.addEventListener('click', () => { localStorage.setItem('oniPwaDismissed', '1'); hidePrompt(); });
+
+  window.addEventListener('beforeinstallprompt', event => {
+    event.preventDefault();
+    deferredInstall = event;
+    showPrompt();
+  });
+  action?.addEventListener('click', async () => {
+    if (deferredInstall) {
+      deferredInstall.prompt();
+      await deferredInstall.userChoice;
+      deferredInstall = undefined;
+      hidePrompt();
+    }
+  });
+  window.addEventListener('appinstalled', () => { deferredInstall = undefined; hidePrompt(); });
+
+  if (/iPad|iPhone|iPod/.test(navigator.userAgent) && !standalone) {
+    title.textContent = 'ADD ONI HUB TO HOME SCREEN';
+    copy.textContent = 'Safari Share → Add to Home Screen';
+    action.hidden = true;
+    setTimeout(showPrompt, 1200);
+  }
+
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', async () => {
+      const registration = await navigator.serviceWorker.register('./sw.js', {scope: './'});
+      registration.addEventListener('updatefound', () => {
+        const worker = registration.installing;
+        worker?.addEventListener('statechange', () => {
+          if (worker.state === 'installed' && navigator.serviceWorker.controller) {
+            title.textContent = 'ONI HUB UPDATE READY';
+            copy.textContent = 'Reload to use the newest version.';
+            action.textContent = 'UPDATE';
+            action.hidden = false;
+            action.onclick = () => worker.postMessage({type: 'SKIP_WAITING'});
+            prompt?.classList.add('show');
+          }
+        });
+      });
+      navigator.serviceWorker.addEventListener('controllerchange', () => window.location.reload());
+    });
+  }
+})();
 </script></body>
 </html>

@@ -3,16 +3,17 @@
   "short_name": "ONI HUB",
   "description": "ONI & KISHIN CPM community hub — AI, cars, players, clans and events.",
   "lang": "mn",
-  "start_url": "/oni-kishin-web/",
-  "scope": "/oni-kishin-web/",
+  "id": "./",
+  "start_url": "./",
+  "scope": "./",
   "display": "standalone",
+  "display_override": ["window-controls-overlay", "standalone", "minimal-ui"],
   "background_color": "#050507",
-  "theme_color": "#07070a",
-  "orientation": "portrait-primary",
-  "icons": [{
-    "src": "oni-kishin-logo.jpg",
-    "sizes": "any",
-    "type": "image/jpeg",
-    "purpose": "any maskable"
-  }]
+  "theme_color": "#050507",
+  "prefer_related_applications": false,
+  "icons": [
+    {"src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any"},
+    {"src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any"},
+    {"src": "icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable"}
+  ]
 }
