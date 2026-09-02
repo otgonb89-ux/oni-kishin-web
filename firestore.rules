@@ -2,148 +2,101 @@ rules_version = '2';
 
 service cloud.firestore {
   match /databases/{database}/documents {
+    // Roles are Firebase custom claims issued by a trusted Admin SDK process.
+    // Supported values: owner, admin, moderator, verified_clan, user.
+    function signedIn() { return request.auth != null; }
+    function hasRole(role) { return signedIn() && request.auth.token.oni_role == role; }
+    function canModerate() { return hasRole('owner') || hasRole('admin') || hasRole('moderator'); }
+    function canManageContent() { return hasRole('owner') || hasRole('admin'); }
+    function isShortText(value, maximum) { return value is string && value.size() <= maximum; }
+    function isRequiredText(value, maximum) { return value is string && value.size() > 0 && value.size() <= maximum; }
 
-    // =========================================================
-    // ADMIN AUTHORIZATION
-    // =========================================================
-    // The current admin.html authenticates this address.
-    function isAdmin() {
-      return request.auth != null
-        && request.auth.token.email == "erkaa130@gmail.com";
+    function isPublicApplication() {
+      return request.resource.data.keys().hasOnly(['last', 'first', 'age', 'gender', 'cpmid', 'nick', 'direction', 'contactType', 'contact', 'experience', 'message', 'status', 'createdAt'])
+        && request.resource.data.status == 'Шинэ'
+        && request.resource.data.createdAt == request.time
+        && request.resource.data.age is int && request.resource.data.age >= 17 && request.resource.data.age <= 100
+        && isRequiredText(request.resource.data.last, 80)
+        && isRequiredText(request.resource.data.first, 80)
+        && isRequiredText(request.resource.data.gender, 32)
+        && isRequiredText(request.resource.data.cpmid, 48)
+        && isRequiredText(request.resource.data.nick, 48)
+        && isRequiredText(request.resource.data.direction, 48)
+        && isRequiredText(request.resource.data.contactType, 32)
+        && isRequiredText(request.resource.data.contact, 160)
+        && isRequiredText(request.resource.data.experience, 80)
+        && isShortText(request.resource.data.message, 800);
     }
 
-    // =========================================================
-    // MEMBERS
-    // =========================================================
-    match /members/{memberId} {
-      allow read: if true;
-      allow create, update, delete: if isAdmin();
+    function isPublicOrder() {
+      return request.resource.data.keys().hasOnly(['orderNo', 'productId', 'productName', 'unitPrice', 'quantity', 'total', 'cpmNick', 'cpmId', 'instagram', 'phone', 'note', 'status', 'createdAt'])
+        && request.resource.data.status == 'Шинэ'
+        && request.resource.data.createdAt == request.time
+        && isRequiredText(request.resource.data.orderNo, 40)
+        && isRequiredText(request.resource.data.productId, 120)
+        && isRequiredText(request.resource.data.productName, 120)
+        && request.resource.data.unitPrice is number && request.resource.data.unitPrice >= 0 && request.resource.data.unitPrice <= 100000000
+        && request.resource.data.quantity is int && request.resource.data.quantity >= 1 && request.resource.data.quantity <= 10
+        && request.resource.data.total is number && request.resource.data.total >= 0 && request.resource.data.total <= 1000000000
+        && request.resource.data.total == request.resource.data.unitPrice * request.resource.data.quantity
+        && isRequiredText(request.resource.data.cpmNick, 48)
+        && isRequiredText(request.resource.data.cpmId, 48)
+        && isShortText(request.resource.data.instagram, 64)
+        && isShortText(request.resource.data.phone, 32)
+        && isShortText(request.resource.data.note, 800);
     }
 
-    // =========================================================
-    // GARAGE
-    // =========================================================
-    match /garage/{garageId} {
-      allow read: if true;
-      allow create, update, delete: if isAdmin();
-    }
-
-    // =========================================================
-    // APPLICATIONS / JOIN
-    // =========================================================
-    match /applications/{applicationId} {
-      allow create: if
-        request.resource.data.status == "Шинэ"
-        && request.resource.data.last is string
-        && request.resource.data.first is string
-        && request.resource.data.age is int
-        && request.resource.data.age >= 17
-        && request.resource.data.gender is string
-        && request.resource.data.cpmid is string
-        && request.resource.data.nick is string
-        && request.resource.data.direction is string
-        && request.resource.data.contactType is string
-        && request.resource.data.contact is string
-        && request.resource.data.experience is string
-        && request.resource.data.message is string;
-
-      allow read, update, delete: if isAdmin();
-    }
-
-    // =========================================================
-    // PRODUCTS / MARKET
-    // =========================================================
-    match /products/{productId} {
-      allow read: if true;
-      allow create, update, delete: if isAdmin();
-    }
-
-    // =========================================================
-    // GALLERY
-    // =========================================================
-    match /gallery/{galleryId} {
-      allow read: if true;
-      allow create, update, delete: if isAdmin();
-    }
-
-    // =========================================================
-    // ORDERS
-    // =========================================================
-    match /orders/{orderId} {
-      allow create: if
-        request.resource.data.status == "Шинэ"
-        && request.resource.data.productId is string
-        && request.resource.data.productName is string
-        && request.resource.data.quantity is int
-        && request.resource.data.quantity >= 1;
-
-      allow read, update, delete: if isAdmin();
-    }
-
-    // =========================================================
-    // SITE
-    // =========================================================
-    match /site/{siteId} {
-      allow read: if true;
-      allow create, update, delete: if isAdmin();
-    }
-
-    // =========================================================
-    // SETTINGS
-    // =========================================================
-    match /settings/{settingId} {
-      allow read: if true;
-      allow create, update, delete: if isAdmin();
-    }
-
-    // =========================================================
-    // ONI MEET
-    // =========================================================
-    match /meets/{meetId} {
-      // Public website needs the current meet for countdown/room access.
-      allow read: if true;
-      allow create, update, delete: if isAdmin();
-    }
-
-    // =========================================================
-    // ONI MEET PARTICIPANTS
-    // =========================================================
-    // The website only accepts a participant whose memberId exists in the
-    // public roster and whose Nick + CPM ID match that roster document.
-    // This prevents arbitrary fake participant records while keeping the
-    // realtime public counter working without requiring user login.
-    function validParticipantBase() {
-      return request.resource.data.meetId == "current"
-        && request.resource.data.memberId is string
-        && request.resource.data.nick is string
-        && request.resource.data.name is string
-        && request.resource.data.cpmId is string
-        && request.resource.data.source == "website"
+    function validParticipant() {
+      return request.resource.data.keys().hasOnly(['meetId', 'meetStartAt', 'memberId', 'nick', 'name', 'cpmId', 'joinedAt', 'source'])
+        && request.resource.data.meetId == 'current'
+        && isRequiredText(request.resource.data.memberId, 128)
+        && isRequiredText(request.resource.data.nick, 48)
+        && isRequiredText(request.resource.data.name, 96)
+        && isRequiredText(request.resource.data.cpmId, 48)
+        && request.resource.data.joinedAt == request.time
+        && request.resource.data.source == 'website'
         && exists(/databases/$(database)/documents/meets/current)
         && get(/databases/$(database)/documents/meets/current).data.enabled == true
+        && (
+          // New Meets use a timestamp and are enforced by server time.
+          (request.resource.data.meetStartAt is timestamp
+            && request.resource.data.meetStartAt == get(/databases/$(database)/documents/meets/current).data.startAt
+            && request.time >= get(/databases/$(database)/documents/meets/current).data.startAt
+            && request.time <= get(/databases/$(database)/documents/meets/current).data.startAt + duration.value(get(/databases/$(database)/documents/meets/current).data.durationMinutes, 'm'))
+          // Keep an already-published ISO-date Meet working until an owner/admin
+          // saves it again. It remains bound to that exact active Meet document.
+          || (isRequiredText(request.resource.data.meetStartAt, 64)
+            && request.resource.data.meetStartAt == get(/databases/$(database)/documents/meets/current).data.startAt)
+        )
         && exists(/databases/$(database)/documents/members/$(request.resource.data.memberId))
         && get(/databases/$(database)/documents/members/$(request.resource.data.memberId)).data.nick == request.resource.data.nick
         && get(/databases/$(database)/documents/members/$(request.resource.data.memberId)).data.cpmid == request.resource.data.cpmId;
     }
 
+    match /members/{memberId} { allow read: if true; allow create, update, delete: if canManageContent(); }
+    match /garage/{garageId} { allow read: if true; allow create, update, delete: if canManageContent(); }
+    match /products/{productId} { allow read: if true; allow create, update, delete: if canManageContent(); }
+    match /gallery/{galleryId} { allow read: if true; allow create, update, delete: if canManageContent(); }
+    match /site/{siteId} { allow read: if true; allow create, update, delete: if canManageContent(); }
+    match /settings/{settingId} { allow read: if true; allow create, update, delete: if canManageContent(); }
+    match /music/{musicId} { allow read: if true; allow create, update, delete: if canManageContent(); }
+
+    match /applications/{applicationId} { allow create: if isPublicApplication(); allow read, update, delete: if canModerate(); }
+    match /orders/{orderId} { allow create: if isPublicOrder(); allow read, update, delete: if canModerate(); }
+
+    // This legacy public event document is intentionally limited to `current`.
+    // Field-level confidentiality is not possible in Firestore Rules; private
+    // events require a server-issued participant credential flow.
+    match /meets/{meetId} { allow read: if meetId == 'current'; allow create, update, delete: if canManageContent(); }
+    match /meetSecrets/{secretId} { allow read, create, update, delete: if canManageContent(); }
+
     match /meetParticipants/{participantId} {
       allow read: if true;
-
-      // Initial JOIN and later CPM-opened timestamp update.
-      allow create: if validParticipantBase();
-
-      allow update: if validParticipantBase()
-        && resource.data.memberId == request.resource.data.memberId
-        && resource.data.meetId == request.resource.data.meetId;
-
-      allow delete: if isAdmin();
+      allow create: if validParticipant() && participantId == request.resource.data.memberId + '_' + request.resource.data.meetId;
+      allow update: if false;
+      allow delete: if canModerate();
     }
 
-    // =========================================================
-    // EVERYTHING ELSE = DENY
-    // =========================================================
-    match /{document=**} {
-      allow read, write: if false;
-    }
+    match /{document=**} { allow read, write: if false; }
   }
 }

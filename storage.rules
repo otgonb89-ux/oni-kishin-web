@@ -2,16 +2,23 @@ rules_version = '2';
 
 service firebase.storage {
   match /b/{bucket}/o {
-    function isAdmin() {
-      return request.auth != null && request.auth.token.email == "erkaa130@gmail.com";
+    function canManageMedia() {
+      return request.auth != null
+        && (request.auth.token.oni_role == 'owner' || request.auth.token.oni_role == 'admin');
+    }
+    function isSafeImage() {
+      return request.resource != null && request.resource.size > 0 && request.resource.size <= 8 * 1024 * 1024
+        && request.resource.contentType.matches('image/(jpeg|png|webp|avif)');
+    }
+    function isSafeAudio() {
+      return request.resource != null && request.resource.size > 0 && request.resource.size <= 20 * 1024 * 1024
+        && request.resource.contentType.matches('audio/(mpeg|mp4|ogg|wav|webm)');
     }
 
-    match /{allPaths=**} {
-      allow read: if true;
-      allow write: if isAdmin()
-        && request.resource != null
-        && request.resource.size < 8 * 1024 * 1024
-        && request.resource.contentType.matches('image/.*');
-    }
+    // Only reviewed public media is readable without authentication. Private
+    // user files, original uploads, applications, and order evidence default deny.
+    match /public/images/{fileName} { allow read: if true; allow write: if canManageMedia() && isSafeImage(); }
+    match /public/audio/{fileName} { allow read: if true; allow write: if canManageMedia() && isSafeAudio(); }
+    match /{allPaths=**} { allow read, write: if false; }
   }
 }

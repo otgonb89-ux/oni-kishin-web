@@ -10,8 +10,8 @@ Firebase:
 - Storage Rules: storage.rules
 
 Admin:
-- erkaa130@gmail.com
-- Email/password and Google sign-in
+- Firebase Authentication with an `oni_role` custom claim
+- See SECURITY.md for role provisioning; do not hard-code administrator emails
 
 Core collections:
 - members

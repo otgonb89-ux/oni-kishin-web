@@ -1,0 +1,9 @@
+{
+  "name": "oni-kishin-web",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "check": "node --check src/index.js && node --check src/secure-worker.js",
+    "test": "node --test tests/security-worker.test.mjs"
+  }
+}

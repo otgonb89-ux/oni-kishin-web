@@ -260,7 +260,7 @@ body{
     <h1>ADMIN V4</h1>
     <div style="margin-top:6px;color:#b8b8c3;font-size:11px;font-weight:800">ТАВТАЙ МОРИЛ • LEADER KITSUNE • CO-LEADER HUGO</div>
     <p class="muted">Clan-ийн бүх системийг нэг самбараас удирдана.</p>
-    <div class="field" style="margin-top:20px"><label>ADMIN EMAIL</label><input id="email" type="email" value="erkaa130@gmail.com"></div>
+    <div class="field" style="margin-top:20px"><label>ADMIN EMAIL</label><input id="email" type="email" autocomplete="username"></div>
     <div class="field" style="margin-top:10px"><label>PASSWORD</label><input id="password" type="password" placeholder="Нууц үг"></div>
     <div class="toolbar" style="margin-top:14px"><button id="loginBtn" class="btn red" style="flex:1">COMMAND CENTER →</button><button id="forgotBtn" class="btn">RESET</button></div>
     <div id="loginMsg" class="msg"></div>
@@ -522,9 +522,10 @@ body{
 <script type="module">
 import{initializeApp}from"https://www.gstatic.com/firebasejs/12.17.1/firebase-app.js";
 import{getAuth,signInWithEmailAndPassword,sendPasswordResetEmail,onAuthStateChanged,signOut}from"https://www.gstatic.com/firebasejs/12.17.1/firebase-auth.js";
-import{getFirestore,collection,doc,getDoc,setDoc,addDoc,getDocs,deleteDoc,updateDoc,serverTimestamp,query,where}from"https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore.js";
+import{getFirestore,collection,doc,getDoc,setDoc,addDoc,getDocs,deleteDoc,updateDoc,serverTimestamp,Timestamp,query,where}from"https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore.js";
 const firebaseConfig={apiKey:"AIzaSyDt0DjUhafGZ2D-co3ZhZlIde_Qe1K5trw",authDomain:"oni-kishin-f59b4.firebaseapp.com",projectId:"oni-kishin-f59b4",storageBucket:"oni-kishin-f59b4.firebasestorage.app",messagingSenderId:"523789047478",appId:"1:523789047478:web:c7e250d094c38abe61f817",measurementId:"G-TCZM9S9ZDT"};
-const app=initializeApp(firebaseConfig),auth=getAuth(app),db=getFirestore(app),ADMIN_EMAIL="erkaa130@gmail.com",$=id=>document.getElementById(id);
+const app=initializeApp(firebaseConfig),auth=getAuth(app),db=getFirestore(app),$=id=>document.getElementById(id);
+let ADMIN_EMAIL="";
 const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]));
 function msg(el,text,type="err"){el.textContent=text;el.className="msg show "+type}
 function toast(t){$("toast").textContent=t;$("toast").classList.add("show");setTimeout(()=>$("toast").classList.remove("show"),2200)}
@@ -573,8 +574,8 @@ window.uploadGarageImage = async function uploadGarageImage(file){
   });
 };
 
-$("loginBtn").onclick=async()=>{const e=$("email").value.trim().toLowerCase(),p=$("password").value;if(e!==ADMIN_EMAIL)return msg($("loginMsg"),"Энэ email admin эрхгүй.");if(!p)return msg($("loginMsg"),"Нууц үгээ оруулна уу.");try{await signInWithEmailAndPassword(auth,e,p)}catch(err){console.error(err);msg($("loginMsg"),"Email эсвэл нууц үг буруу байна.")}};
-$("forgotBtn").onclick=async()=>{const e=$("email").value.trim().toLowerCase();if(e!==ADMIN_EMAIL)return msg($("loginMsg"),"Admin Gmail-ээ оруулна уу.");try{await sendPasswordResetEmail(auth,e);msg($("loginMsg"),"Reset холбоос Gmail рүү илгээгдлээ.","ok")}catch(e){msg($("loginMsg"),"Reset email илгээж чадсангүй.")}};
+$("loginBtn").onclick=async()=>{const e=$("email").value.trim().toLowerCase(),p=$("password").value;if(!e||!p)return msg($("loginMsg"),"Email болон нууц үгээ оруулна уу.");try{await signInWithEmailAndPassword(auth,e,p)}catch(err){console.error(err);msg($("loginMsg"),"Email эсвэл нууц үг буруу байна.")}};
+$("forgotBtn").onclick=async()=>{const e=$("email").value.trim().toLowerCase();if(!e)return msg($("loginMsg"),"Email-ээ оруулна уу.");try{await sendPasswordResetEmail(auth,e);msg($("loginMsg"),"Reset холбоос Gmail рүү илгээгдлээ.","ok")}catch(e){msg($("loginMsg"),"Reset email илгээж чадсангүй.")}};
 $("logoutBtn").onclick=()=>signOut(auth);
 const views=[...document.querySelectorAll(".view")],navs=[...document.querySelectorAll(".navbtn[data-view]")];
 function go(id){views.forEach(v=>v.classList.toggle("active",v.id===id));navs.forEach(n=>n.classList.toggle("active",n.dataset.view===id));$("topTitle").textContent={overview:"Command Center",garage:"Garage Manager",members:"Member Control",applications:"Application Review",analytics:"Clan Analytics",settings:"Website Settings",market:"ONI Market",gallery:"ONI Gallery",meet:"ONI Meet Control",music:"ONI Music Control"}[id]||id;$("side").classList.remove("open");if(id==="garage")loadGarage();if(id==="members")loadMembers();if(id==="applications")loadApps();if(id==="settings")loadSettings();if(id==="market"){loadProducts();loadOrders()}if(id==="gallery")loadGalleryAdmin();if(id==="music")loadMusic();if(id==="meet")loadMeetAdmin()}
@@ -787,7 +788,7 @@ function renderAnalytics(){
 $("analyticsRefresh").onclick=async()=>{await Promise.allSettled([loadGarage(),loadMembers(),loadApps()]);renderAnalytics();toast("Статистик шинэчлэгдлээ")};
 
 async function boot(){await Promise.allSettled([loadGarage(),loadMembers(),loadApps(),loadSettings()]);renderV4Dashboard();renderAnalytics();$("v4Capacity").textContent=`${memberData.length} / 52`;$("v4Garage").textContent=garageData.length;$("v4Apps").textContent=appData.filter(x=>!["Зөвшөөрсөн","Татгалзсан"].includes(x.data.status)).length}
-onAuthStateChanged(auth,async user=>{if(user?.email?.toLowerCase()===ADMIN_EMAIL){$("loginView").classList.add("hidden");$("appView").classList.remove("hidden");$("sideEmail").textContent=user.email;await boot()}else{if(user)await signOut(auth);$("loginView").classList.remove("hidden");$("appView").classList.add("hidden")}});
+onAuthStateChanged(auth,async user=>{if(!user){$("loginView").classList.remove("hidden");$("appView").classList.add("hidden");return}try{const token=await user.getIdTokenResult(true),role=token.claims.oni_role;ADMIN_EMAIL=user.uid;if(role!=="owner"&&role!=="admin"){await signOut(auth);msg($("loginMsg"),"Энэ account-д ONI HUB admin эрх алга.");$("loginView").classList.remove("hidden");$("appView").classList.add("hidden");return}$("loginView").classList.add("hidden");$("appView").classList.remove("hidden");$("sideEmail").textContent=user.email||user.uid;await boot()}catch(err){console.error("Admin authorization:",err);await signOut(auth);msg($("loginMsg"),"Admin эрх шалгахад алдаа гарлаа.");$("loginView").classList.remove("hidden");$("appView").classList.add("hidden")}});
 
 (function(){
   const MEET_DOC='current', MAX=20;
@@ -983,7 +984,9 @@ onAuthStateChanged(auth,async user=>{if(user?.email?.toLowerCase()===ADMIN_EMAIL
       await setDoc(doc(db,'meets',MEET_DOC),{
         name,
         roomLabel:$('meetRoomLabel').value.trim(),
-        startAt:start.toISOString(),
+        // Store a Firestore timestamp so Rules can enforce the live event
+        // window instead of trusting browser-side countdown logic.
+        startAt:Timestamp.fromDate(start),
         durationMinutes:duration,
         roomId,
         password,
