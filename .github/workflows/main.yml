@@ -1,0 +1,69 @@
+name: Deploy ONI & KISHIN Website
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Prepare PWA shell
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p = Path("index.html")
+          s = p.read_text(encoding="utf-8")
+
+          if 'href="manifest.webmanifest"' not in s:
+              s = s.replace(
+                  "</head>",
+                  '  <link rel="manifest" href="manifest.webmanifest">\n'
+                  '  <meta name="apple-mobile-web-app-capable" content="yes">\n'
+                  '  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">\n'
+                  '  <meta name="apple-mobile-web-app-title" content="ONI HUB">\n'
+                  "</head>",
+                  1
+              )
+
+          if 'serviceWorker.register("/oni-kishin-web/sw.js"' not in s:
+              s = s.replace(
+                  "</body>",
+                  '  <script>if ("serviceWorker" in navigator) navigator.serviceWorker.register("/oni-kishin-web/sw.js", {scope:"/oni-kishin-web/"}).catch(console.error);</script>\n'
+                  "</body>",
+                  1
+              )
+
+          p.write_text(s, encoding="utf-8")
+          PY
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload website
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: .
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

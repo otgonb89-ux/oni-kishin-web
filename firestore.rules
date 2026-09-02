@@ -1,0 +1,149 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // =========================================================
+    // ADMIN AUTHORIZATION
+    // =========================================================
+    // The current admin.html authenticates this address.
+    function isAdmin() {
+      return request.auth != null
+        && request.auth.token.email == "erkaa130@gmail.com";
+    }
+
+    // =========================================================
+    // MEMBERS
+    // =========================================================
+    match /members/{memberId} {
+      allow read: if true;
+      allow create, update, delete: if isAdmin();
+    }
+
+    // =========================================================
+    // GARAGE
+    // =========================================================
+    match /garage/{garageId} {
+      allow read: if true;
+      allow create, update, delete: if isAdmin();
+    }
+
+    // =========================================================
+    // APPLICATIONS / JOIN
+    // =========================================================
+    match /applications/{applicationId} {
+      allow create: if
+        request.resource.data.status == "Шинэ"
+        && request.resource.data.last is string
+        && request.resource.data.first is string
+        && request.resource.data.age is int
+        && request.resource.data.age >= 17
+        && request.resource.data.gender is string
+        && request.resource.data.cpmid is string
+        && request.resource.data.nick is string
+        && request.resource.data.direction is string
+        && request.resource.data.contactType is string
+        && request.resource.data.contact is string
+        && request.resource.data.experience is string
+        && request.resource.data.message is string;
+
+      allow read, update, delete: if isAdmin();
+    }
+
+    // =========================================================
+    // PRODUCTS / MARKET
+    // =========================================================
+    match /products/{productId} {
+      allow read: if true;
+      allow create, update, delete: if isAdmin();
+    }
+
+    // =========================================================
+    // GALLERY
+    // =========================================================
+    match /gallery/{galleryId} {
+      allow read: if true;
+      allow create, update, delete: if isAdmin();
+    }
+
+    // =========================================================
+    // ORDERS
+    // =========================================================
+    match /orders/{orderId} {
+      allow create: if
+        request.resource.data.status == "Шинэ"
+        && request.resource.data.productId is string
+        && request.resource.data.productName is string
+        && request.resource.data.quantity is int
+        && request.resource.data.quantity >= 1;
+
+      allow read, update, delete: if isAdmin();
+    }
+
+    // =========================================================
+    // SITE
+    // =========================================================
+    match /site/{siteId} {
+      allow read: if true;
+      allow create, update, delete: if isAdmin();
+    }
+
+    // =========================================================
+    // SETTINGS
+    // =========================================================
+    match /settings/{settingId} {
+      allow read: if true;
+      allow create, update, delete: if isAdmin();
+    }
+
+    // =========================================================
+    // ONI MEET
+    // =========================================================
+    match /meets/{meetId} {
+      // Public website needs the current meet for countdown/room access.
+      allow read: if true;
+      allow create, update, delete: if isAdmin();
+    }
+
+    // =========================================================
+    // ONI MEET PARTICIPANTS
+    // =========================================================
+    // The website only accepts a participant whose memberId exists in the
+    // public roster and whose Nick + CPM ID match that roster document.
+    // This prevents arbitrary fake participant records while keeping the
+    // realtime public counter working without requiring user login.
+    function validParticipantBase() {
+      return request.resource.data.meetId == "current"
+        && request.resource.data.memberId is string
+        && request.resource.data.nick is string
+        && request.resource.data.name is string
+        && request.resource.data.cpmId is string
+        && request.resource.data.source == "website"
+        && exists(/databases/$(database)/documents/meets/current)
+        && get(/databases/$(database)/documents/meets/current).data.enabled == true
+        && exists(/databases/$(database)/documents/members/$(request.resource.data.memberId))
+        && get(/databases/$(database)/documents/members/$(request.resource.data.memberId)).data.nick == request.resource.data.nick
+        && get(/databases/$(database)/documents/members/$(request.resource.data.memberId)).data.cpmid == request.resource.data.cpmId;
+    }
+
+    match /meetParticipants/{participantId} {
+      allow read: if true;
+
+      // Initial JOIN and later CPM-opened timestamp update.
+      allow create: if validParticipantBase();
+
+      allow update: if validParticipantBase()
+        && resource.data.memberId == request.resource.data.memberId
+        && resource.data.meetId == request.resource.data.meetId;
+
+      allow delete: if isAdmin();
+    }
+
+    // =========================================================
+    // EVERYTHING ELSE = DENY
+    // =========================================================
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

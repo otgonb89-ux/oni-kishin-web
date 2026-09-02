@@ -1,0 +1,7 @@
+name = "oni-ai-v9"
+main = "src/secure-worker.js"
+compatibility_date = "2026-09-01"
+
+[vars]
+ONI_MODEL = "gpt-5.6-luna"
+ONI_ALLOWED_ORIGINS = "https://erkaa2323-sudo.github.io"

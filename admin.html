@@ -1,0 +1,1124 @@
+<!doctype html>
+<html lang="mn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#030305">
+<title>ONI & KISHIN — Command Center V4.1 STORAGE FIX</title>
+<style>
+:root{--bg:#030305;--panel:#09090e;--panel2:#0d0d14;--line:rgba(255,255,255,.085);--text:#f7f7fa;--muted:#8d8e9b;--red:#ff2038;--violet:#7657ff;--green:#42e6a4;--gold:#ffd66b;--blue:#70a7ff}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:radial-gradient(circle at 85% 0%,rgba(255,32,56,.12),transparent 25%),radial-gradient(circle at 5% 50%,rgba(118,87,255,.08),transparent 28%),#030305;color:var(--text);font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}button,input,select,textarea{font:inherit}button{cursor:pointer}.shell{display:grid;grid-template-columns:255px 1fr;min-height:100vh}.side{position:sticky;top:0;height:100vh;border-right:1px solid var(--line);background:rgba(5,5,8,.78);backdrop-filter:blur(24px);padding:20px 14px;z-index:20}.brand{display:flex;align-items:center;gap:11px;padding:8px 10px 25px;text-decoration:none;color:#fff;font-weight:950;letter-spacing:.12em}.brand-mark{width:43px;height:43px;border-radius:14px;display:grid;place-items:center;background:linear-gradient(145deg,#211016,#08080b);border:1px solid rgba(255,255,255,.12);box-shadow:0 0 28px rgba(255,32,56,.16);font-size:19px}.brand b{color:var(--red)}.nav-title{font-size:9px;color:#555662;font-weight:900;letter-spacing:.18em;padding:12px 11px 7px}.navbtn{width:100%;border:1px solid transparent;background:transparent;color:#858692;text-align:left;padding:12px 13px;border-radius:12px;margin:2px 0;font-weight:800;font-size:12px}.navbtn:hover,.navbtn.active{color:#fff;background:linear-gradient(90deg,rgba(255,32,56,.13),rgba(255,255,255,.025));border-color:rgba(255,32,56,.18)}.navbtn.active{box-shadow:inset 2px 0 var(--red)}.side-bottom{position:absolute;left:14px;right:14px;bottom:16px}.userpill{border:1px solid var(--line);background:rgba(255,255,255,.025);border-radius:14px;padding:11px;font-size:10px;color:#999}.userpill b{display:block;color:#fff;font-size:11px;margin-bottom:3px;overflow:hidden;text-overflow:ellipsis}.main{min-width:0}.top{height:74px;position:sticky;top:0;z-index:15;display:flex;align-items:center;justify-content:space-between;padding:0 28px;border-bottom:1px solid var(--line);background:rgba(3,3,5,.66);backdrop-filter:blur(22px)}.top-title{font-weight:900;letter-spacing:-.02em}.top-right{display:flex;gap:8px;align-items:center}.iconbtn,.logout{border:1px solid var(--line);background:rgba(255,255,255,.035);color:#ddd;border-radius:11px;padding:9px 11px}.logout{color:#ff9da6}.content{width:min(1250px,94%);margin:auto;padding:28px 0 80px}.view{display:none}.view.active{display:block}.herohead{display:flex;justify-content:space-between;gap:20px;align-items:flex-end;margin-bottom:22px}.eyebrow{font-size:9px;font-weight:900;letter-spacing:.22em;color:#72737e}.herohead h1{font-family:ui-sans-serif,system-ui;font-size:clamp(35px,5vw,68px);line-height:.95;letter-spacing:-.055em;margin:8px 0}.herohead p{color:var(--muted);max-width:650px;line-height:1.6;font-size:13px}.live{display:flex;align-items:center;gap:8px;font-size:9px;font-weight:900;color:#8e8f9a;white-space:nowrap}.dot{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 15px var(--green)}.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:18px}.stat{padding:18px;border:1px solid var(--line);border-radius:18px;background:linear-gradient(145deg,rgba(255,255,255,.045),rgba(255,255,255,.012));box-shadow:0 18px 55px rgba(0,0,0,.2)}.stat small{color:#666772;font-size:8px;font-weight:900;letter-spacing:.14em}.stat strong{display:block;font-size:31px;margin-top:7px;letter-spacing:-.04em}.stat em{font-style:normal;color:#777;font-size:9px}.panel{border:1px solid var(--line);border-radius:20px;background:linear-gradient(145deg,rgba(255,255,255,.04),rgba(255,255,255,.012));box-shadow:0 20px 70px rgba(0,0,0,.22);padding:20px;margin-bottom:15px}.panel-head{display:flex;justify-content:space-between;align-items:center;gap:15px;margin-bottom:16px}.panel-head h2{font-size:16px;margin:0}.muted{color:var(--muted);font-size:11px;line-height:1.6}.toolbar{display:flex;gap:8px;flex-wrap:wrap}.btn{border:1px solid var(--line);border-radius:11px;padding:10px 13px;background:rgba(255,255,255,.035);color:#ddd;font-weight:850;font-size:10px}.btn:hover{border-color:rgba(255,255,255,.18)}.btn.red{background:var(--red);border-color:var(--red);color:#fff;box-shadow:0 10px 30px rgba(255,32,56,.16)}.btn.danger{color:#ff9da6;background:rgba(255,32,56,.07);border-color:rgba(255,32,56,.2)}.btn.green{color:#9cf0c8;background:rgba(66,230,164,.07);border-color:rgba(66,230,164,.2)}.btn.gold{color:var(--gold);background:rgba(255,214,107,.07);border-color:rgba(255,214,107,.2)}.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.field label{display:block;color:#92939d;font-size:9px;font-weight:900;letter-spacing:.08em;margin:0 0 6px}.field input,.field select,.field textarea{width:100%;border:1px solid var(--line);border-radius:11px;background:#08080c;color:#fff;padding:11px 12px;outline:none}.field textarea{min-height:100px;resize:vertical}.field input:focus,.field select:focus,.field textarea:focus{border-color:rgba(255,32,56,.55);box-shadow:0 0 0 3px rgba(255,32,56,.07)}.members{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.member{padding:15px;border:1px solid var(--line);border-radius:15px;background:rgba(255,255,255,.018)}.member-top{display:flex;justify-content:space-between;gap:8px}.nick{font-weight:900;font-size:15px}.meta{font-size:9px;color:#6f707b;margin-top:4px}.badge{padding:5px 8px;border-radius:20px;font-size:7px;font-weight:950;letter-spacing:.1em;background:#18181f;color:#bbb;height:max-content}.leader{color:var(--gold);background:rgba(255,214,107,.09)}.co{color:var(--blue);background:rgba(112,167,255,.09)}.special{color:#e5a6ff;background:rgba(118,87,255,.12)}.applications{display:grid;gap:10px}.application{border:1px solid var(--line);border-radius:15px;background:rgba(255,255,255,.018);padding:15px}.app-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:12px 0}.mini{padding:9px;border-radius:10px;background:#08080c;border:1px solid rgba(255,255,255,.05)}.mini small{display:block;color:#5f606b;font-size:7px;font-weight:900;margin-bottom:4px}.mini b{font-size:9px}.garage-admin{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.garage-item{overflow:hidden;border:1px solid var(--line);border-radius:17px;background:#08080c}.garage-thumb{height:150px;background:radial-gradient(circle at 70% 30%,rgba(255,32,56,.18),transparent 35%),linear-gradient(145deg,#19131a,#07070a);display:grid;place-items:center;position:relative}.garage-thumb img{width:100%;height:100%;object-fit:cover}.garage-thumb .placeholder{font-size:40px;opacity:.25}.garage-info{padding:13px}.garage-info h3{margin:0 0 4px;font-size:15px}.garage-info p{margin:0;color:#72737e;font-size:9px}.garage-actions{display:flex;gap:6px;margin-top:10px}.market-service-card .garage-thumb{height:170px}.market-service-card .garage-thumb img{object-fit:cover}.market-service-card .field{margin-bottom:0}.market-service-card input{padding:9px 10px;font-size:11px}.empty{padding:30px;text-align:center;color:#666;border:1px dashed var(--line);border-radius:15px}.search{max-width:240px}.toast{position:fixed;right:18px;bottom:18px;z-index:100;padding:12px 15px;border-radius:12px;background:#111219;border:1px solid var(--line);box-shadow:0 20px 70px rgba(0,0,0,.55);font-size:10px;display:none}.toast.show{display:block}.modal{display:none;position:fixed;inset:0;z-index:90;align-items:center;justify-content:center;padding:18px}.modal.open{display:flex}.backdrop{position:absolute;inset:0;background:rgba(0,0,0,.74);backdrop-filter:blur(10px)}.modal-card{position:relative;z-index:1;width:min(650px,100%);max-height:90vh;overflow:auto;border:1px solid var(--line);border-radius:22px;background:#08080c;padding:20px;box-shadow:0 40px 120px rgba(0,0,0,.8)}.close{position:absolute;right:12px;top:12px;width:36px;height:36px;border-radius:10px;background:#111;color:#fff;border:1px solid var(--line);font-size:20px}.hidden{display:none!important}.login{min-height:100vh;display:grid;place-items:center;padding:20px;background:radial-gradient(circle at 50% 20%,rgba(255,32,56,.15),transparent 32%),#030305}.login-card{width:min(430px,100%);border:1px solid var(--line);border-radius:24px;background:rgba(10,10,14,.82);backdrop-filter:blur(25px);padding:28px;box-shadow:0 35px 100px rgba(0,0,0,.6)}.login-card h1{font-size:35px;letter-spacing:-.05em;margin:10px 0}.login-logo{width:58px;height:58px;border-radius:18px;display:grid;place-items:center;background:#111;border:1px solid var(--line);font-size:25px}.msg{margin-top:10px;padding:10px;border-radius:10px;font-size:10px;display:none}.msg.show{display:block}.ok{color:#9cf0c8;background:rgba(66,230,164,.07);border:1px solid rgba(66,230,164,.2)}.err{color:#ff9da6;background:rgba(255,32,56,.07);border:1px solid rgba(255,32,56,.2)}
+@media(max-width:1050px){.shell{grid-template-columns:210px 1fr}.members,.garage-admin{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:760px){.shell{display:block}.side{position:fixed;left:-270px;width:260px;transition:.25s}.side.open{left:0;box-shadow:30px 0 90px rgba(0,0,0,.6)}.top{padding:0 15px}.content{width:92%;padding-top:20px}.stats{grid-template-columns:1fr 1fr}.grid2,.grid3,.members,.garage-admin{grid-template-columns:1fr}.app-grid{grid-template-columns:1fr 1fr}.mobile-menu{display:block!important}.herohead{display:block}.live{margin-top:12px}}
+.mobile-menu{display:none}
+
+/* =========================================================
+   ADMIN V4 — ONI COMMAND CENTER
+   Large visual + operational upgrade, no new backend required.
+   Existing Firebase collections/actions remain intact.
+   ========================================================= */
+:root{
+  --red2:#ff4658;
+  --cyan:#6de7ff;
+  --purple:#9b7bff;
+}
+body{
+  background:
+    radial-gradient(circle at 72% -5%,rgba(255,32,56,.18),transparent 28%),
+    radial-gradient(circle at 8% 35%,rgba(118,87,255,.11),transparent 30%),
+    linear-gradient(180deg,#020204,#050507 42%,#020204);
+}
+.side{
+  background:
+    linear-gradient(180deg,rgba(10,7,10,.92),rgba(4,4,7,.88)),
+    radial-gradient(circle at 20% 0%,rgba(255,32,56,.12),transparent 28%);
+}
+.brand-mark{
+  position:relative;
+  overflow:hidden;
+}
+.brand-mark:after{
+  content:"";
+  position:absolute;
+  inset:-40%;
+  background:conic-gradient(from 0deg,transparent 0 70%,rgba(255,32,56,.8) 78%,transparent 88%);
+  animation:cmdSpin 5s linear infinite;
+}
+@keyframes cmdSpin{to{transform:rotate(360deg)}}
+.top{
+  box-shadow:0 12px 45px rgba(0,0,0,.22);
+}
+.command-strip{
+  display:grid;
+  grid-template-columns:1.5fr repeat(3,1fr);
+  gap:10px;
+  margin-bottom:14px;
+}
+.command-card{
+  position:relative;
+  overflow:hidden;
+  min-height:128px;
+  padding:17px;
+  border:1px solid rgba(255,255,255,.085);
+  border-radius:19px;
+  background:
+    linear-gradient(145deg,rgba(255,255,255,.055),rgba(255,255,255,.012)),
+    radial-gradient(circle at 100% 0%,rgba(255,32,56,.10),transparent 45%);
+  box-shadow:0 20px 70px rgba(0,0,0,.25);
+}
+.command-card.primary{
+  background:
+    radial-gradient(circle at 85% 20%,rgba(255,32,56,.22),transparent 38%),
+    linear-gradient(145deg,#161016,#08080c);
+}
+.command-card:after{
+  content:"";
+  position:absolute;
+  width:160px;height:160px;
+  right:-70px;bottom:-95px;
+  border:1px solid rgba(255,32,56,.15);
+  border-radius:50%;
+  box-shadow:0 0 0 24px rgba(255,32,56,.025),0 0 0 48px rgba(255,32,56,.018);
+}
+.command-label{
+  color:#686974;font-size:8px;font-weight:950;letter-spacing:.18em;
+}
+.command-card strong{
+  display:block;font-size:30px;letter-spacing:-.06em;margin-top:8px;
+}
+.command-card p{
+  margin:7px 0 0;color:#858692;font-size:10px;line-height:1.45;
+}
+.command-chip{
+  display:inline-flex;align-items:center;gap:6px;
+  margin-top:12px;padding:6px 8px;border-radius:20px;
+  background:rgba(66,230,164,.07);
+  border:1px solid rgba(66,230,164,.15);
+  color:#9cf0c8;font-size:7px;font-weight:950;letter-spacing:.08em;
+}
+.command-chip.red{
+  color:#ffadb5;background:rgba(255,32,56,.07);border-color:rgba(255,32,56,.17)
+}
+.command-grid{
+  display:grid;
+  grid-template-columns:1.35fr .85fr;
+  gap:14px;
+  align-items:start;
+}
+.command-panel{
+  border:1px solid var(--line);
+  border-radius:21px;
+  background:linear-gradient(145deg,rgba(255,255,255,.045),rgba(255,255,255,.012));
+  box-shadow:0 22px 80px rgba(0,0,0,.24);
+  overflow:hidden;
+}
+.command-panel-head{
+  display:flex;justify-content:space-between;align-items:center;gap:12px;
+  padding:17px 19px;border-bottom:1px solid rgba(255,255,255,.055);
+}
+.command-panel-head h3{margin:0;font-size:13px}
+.command-panel-head span{font-size:8px;color:#666772;font-weight:900;letter-spacing:.12em}
+.command-body{padding:17px 19px}
+.action-grid{
+  display:grid;grid-template-columns:repeat(2,1fr);gap:9px;
+}
+.action-tile{
+  min-height:78px;text-align:left;
+  border:1px solid rgba(255,255,255,.07);
+  background:rgba(255,255,255,.022);
+  color:#ddd;border-radius:14px;padding:12px;
+  transition:.2s ease;
+}
+.action-tile:hover{
+  transform:translateY(-2px);
+  border-color:rgba(255,32,56,.28);
+  background:rgba(255,32,56,.055);
+}
+.action-tile b{display:block;font-size:10px}
+.action-tile small{display:block;color:#686974;font-size:8px;margin-top:5px;line-height:1.35}
+.action-icon{font-size:16px;margin-bottom:7px}
+.role-bars{display:grid;gap:12px}
+.role-row{display:grid;grid-template-columns:110px 1fr 35px;gap:9px;align-items:center}
+.role-row label{font-size:8px;color:#8c8d98;font-weight:900}
+.role-track{height:8px;background:#111118;border-radius:20px;overflow:hidden;border:1px solid rgba(255,255,255,.04)}
+.role-fill{height:100%;border-radius:20px;background:linear-gradient(90deg,var(--red),#ff7a86)}
+.role-fill.gold{background:linear-gradient(90deg,#c58c24,#ffd66b)}
+.role-fill.blue{background:linear-gradient(90deg,#4d8fff,#8ec0ff)}
+.role-fill.purple{background:linear-gradient(90deg,#7657ff,#c3b4ff)}
+.role-row b{text-align:right;font-size:9px}
+.activity{
+  display:grid;gap:9px;
+}
+.activity-item{
+  display:grid;grid-template-columns:30px 1fr auto;gap:9px;align-items:center;
+  padding:10px;border-radius:12px;background:rgba(255,255,255,.018);
+  border:1px solid rgba(255,255,255,.045);
+}
+.activity-icon{
+  width:30px;height:30px;border-radius:10px;display:grid;place-items:center;
+  background:#111119;border:1px solid rgba(255,255,255,.06);font-size:12px;
+}
+.activity-item b{display:block;font-size:9px}
+.activity-item span{display:block;color:#696a75;font-size:8px;margin-top:3px}
+.activity-item time{color:#565762;font-size:7px}
+.metric-row{
+  display:grid;grid-template-columns:1fr auto;gap:10px;
+  padding:11px 0;border-bottom:1px solid rgba(255,255,255,.045);
+}
+.metric-row:last-child{border-bottom:0}
+.metric-row span{font-size:8px;color:#777883;font-weight:800}
+.metric-row b{font-size:10px}
+.signal{
+  display:flex;align-items:center;gap:7px;font-size:8px;color:#9a9ba5;font-weight:900;
+}
+.signal i{width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 13px var(--green)}
+.dashboard-hero{
+  position:relative;overflow:hidden;
+  padding:25px;border:1px solid rgba(255,255,255,.08);border-radius:23px;
+  margin-bottom:14px;
+  background:
+    radial-gradient(circle at 80% 40%,rgba(255,32,56,.18),transparent 31%),
+    linear-gradient(145deg,rgba(255,255,255,.045),rgba(255,255,255,.01));
+}
+.dashboard-hero:before{
+  content:"";
+  position:absolute;inset:0;
+  background:
+    linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);
+  background-size:34px 34px;
+  mask-image:linear-gradient(90deg,black,transparent 75%);
+  pointer-events:none;
+}
+.dashboard-hero .hero-content{position:relative;z-index:1}
+.dashboard-hero h1{
+  margin:8px 0 7px;font-size:clamp(36px,5vw,66px);
+  letter-spacing:-.065em;line-height:.9;
+}
+.dashboard-hero h1 span{color:var(--red)}
+.dashboard-hero p{max-width:650px;color:#858692;font-size:11px;line-height:1.65;margin:0}
+.hero-code{
+  position:absolute;right:25px;top:25px;
+  color:rgba(255,255,255,.055);font-size:58px;font-weight:950;
+  letter-spacing:-.08em;user-select:none;
+}
+.analytics-grid{
+  display:grid;grid-template-columns:1.15fr .85fr;gap:14px;
+}
+.bar-chart{display:flex;align-items:flex-end;gap:9px;height:170px;padding:12px 4px 0}
+.bar{
+  flex:1;min-width:0;position:relative;
+  border-radius:8px 8px 3px 3px;
+  background:linear-gradient(180deg,var(--red2),rgba(255,32,56,.18));
+  box-shadow:0 -5px 25px rgba(255,32,56,.12);
+}
+.bar:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(255,255,255,.15),transparent 35%);border-radius:inherit}
+.bar small{position:absolute;bottom:-18px;left:50%;transform:translateX(-50%);font-size:7px;color:#5e5f69}
+.bar b{position:absolute;top:-16px;left:50%;transform:translateX(-50%);font-size:7px;color:#9697a1}
+.funnel{display:grid;gap:7px}
+.funnel-step{
+  height:34px;border-radius:8px;display:flex;align-items:center;justify-content:space-between;
+  padding:0 10px;font-size:8px;font-weight:900;
+  background:linear-gradient(90deg,rgba(255,32,56,.14),rgba(255,255,255,.025));
+  border:1px solid rgba(255,32,56,.12);
+}
+.funnel-step:nth-child(2){margin-left:8%;width:84%}
+.funnel-step:nth-child(3){margin-left:16%;width:68%}
+.funnel-step:nth-child(4){margin-left:24%;width:52%}
+@media(max-width:980px){
+  .command-strip{grid-template-columns:1fr 1fr}
+  .command-grid,.analytics-grid{grid-template-columns:1fr}
+}
+@media(max-width:760px){
+  .command-strip{grid-template-columns:1fr 1fr}
+  .command-card.primary{grid-column:1/-1}
+  .dashboard-hero{padding:20px}
+  .hero-code{right:16px;top:18px;font-size:34px}
+  .action-grid{grid-template-columns:1fr}
+  .role-row{grid-template-columns:88px 1fr 28px}
+}
+
+
+/* APPLICATION REVIEW V4 FIX */
+.applications{width:100%;min-height:40px;display:grid!important;grid-template-columns:1fr;gap:12px}
+.application{width:100%;min-height:150px;display:block!important;visibility:visible!important}
+.application .panel-head{display:flex!important;visibility:visible!important}
+.application .app-grid{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))}
+@media(max-width:760px){.application .app-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.application .toolbar{display:grid;grid-template-columns:1fr}.application .toolbar .btn{width:100%}}
+
+.market-admin-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.order-status{min-width:210px}
+@media(max-width:1050px){.market-admin-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:760px){.market-admin-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<div id="loginView" class="login">
+  <div class="login-card">
+    <div class="login-logo">鬼</div>
+    <div class="eyebrow" style="margin-top:18px">ONI & KISHIN / COMMAND CENTER</div>
+    <h1>ADMIN V4</h1>
+    <div style="margin-top:6px;color:#b8b8c3;font-size:11px;font-weight:800">ТАВТАЙ МОРИЛ • LEADER KITSUNE • CO-LEADER HUGO</div>
+    <p class="muted">Clan-ийн бүх системийг нэг самбараас удирдана.</p>
+    <div class="field" style="margin-top:20px"><label>ADMIN EMAIL</label><input id="email" type="email" value="erkaa130@gmail.com"></div>
+    <div class="field" style="margin-top:10px"><label>PASSWORD</label><input id="password" type="password" placeholder="Нууц үг"></div>
+    <div class="toolbar" style="margin-top:14px"><button id="loginBtn" class="btn red" style="flex:1">COMMAND CENTER →</button><button id="forgotBtn" class="btn">RESET</button></div>
+    <div id="loginMsg" class="msg"></div>
+  </div>
+</div>
+
+<div id="appView" class="shell hidden">
+  <aside id="side" class="side">
+    <a class="brand" href="index.html"><span class="brand-mark">鬼</span><span>ONI <b>&</b> KISHIN</span></a>
+    <div class="nav-title">COMMAND</div>
+    <button class="navbtn active" data-view="overview">◈ Overview</button>
+    <button class="navbtn" data-view="garage">🚗 Garage</button><button class="navbtn" data-view="market">🛒 Market</button><button class="navbtn" data-view="gallery">🖼 Gallery</button><button class="navbtn" data-view="music">🎵 Music</button>
+    <button class="navbtn" data-view="members">♙ Members</button>
+    <button class="navbtn" data-view="applications">✦ Applications</button>
+    <button class="navbtn" data-view="meet">👹 ONI Meet</button>
+    <button class="navbtn" data-view="analytics">◒ Analytics</button>
+    <button class="navbtn" data-view="settings">⚙ Settings</button>
+    <div class="nav-title">QUICK</div>
+    <a class="navbtn" href="index.html" style="display:block;text-decoration:none">↗ Website</a>
+    <div class="side-bottom"><div class="userpill"><b id="sideEmail"></b>Authenticated admin</div></div>
+  </aside>
+
+  <main class="main">
+    <header class="top">
+      <div style="display:flex;align-items:center;gap:10px"><button id="menuBtn" class="iconbtn mobile-menu">☰</button><div class="top-title" id="topTitle">Overview</div></div>
+      <div class="top-right"><span class="live"><i class="dot"></i> FIREBASE LIVE</span><button id="logoutBtn" class="logout">Logout</button></div>
+    </header>
+
+    <div class="content">
+      
+<section id="overview" class="view active">
+  <div class="dashboard-hero">
+    <div class="hero-content">
+      <div class="eyebrow">ONI & KISHIN / COMMAND CENTER V4</div>
+      <h1>CLAN<br><span>CONTROL.</span></h1>
+      <p>Гишүүд, Garage, элсэлтийн хүсэлт болон сайтын системийг нэг дороос хянах удирдлагын төв.</p>
+      <div style="margin-top:12px;color:#b8b8c3;font-size:11px;font-weight:800">ТАВТАЙ МОРИЛ • LEADER KITSUNE • CO-LEADER HUGO</div>
+      <div style="margin-top:14px;padding:12px 14px;border:1px solid rgba(255,255,255,.08);border-radius:13px;background:rgba(255,255,255,.025);width:max-content;max-width:100%">
+        <div style="font-size:9px;font-weight:950;letter-spacing:.14em;color:#777883">ТАВТАЙ МОРИЛ</div>
+        <div style="font-size:15px;font-weight:900;margin-top:4px">Leader Kitsune <span style="color:#666">·</span> Co-Leader Hugo</div>
+      </div>
+      <div class="toolbar" style="margin-top:16px">
+        <button class="btn red" data-go="members">👥 Гишүүд удирдах</button>
+        <button class="btn" data-go="applications">✦ Хүсэлт шалгах</button>
+        <button class="btn" data-go="garage">🚗 Garage нээх</button><button class="btn" data-go="market">🛒 Market</button>
+        <button class="btn" data-go="analytics">◒ Статистик</button>
+      </div>
+    </div>
+    <div class="hero-code">鬼</div>
+  </div>
+
+  <div class="command-strip">
+    <div class="command-card primary">
+      <div class="command-label">CLAN CAPACITY</div>
+      <strong id="v4Capacity">0 / 52</strong>
+      <p>Одоогийн roster-ийн дүүргэлт.</p>
+      <span class="command-chip">● SYSTEM ONLINE</span>
+    </div>
+    <div class="command-card">
+      <div class="command-label">GARAGE</div>
+      <strong id="v4Garage">0</strong>
+      <p>Showcase build</p>
+      <span class="command-chip red">LIVE</span>
+    </div>
+    <div class="command-card">
+      <div class="command-label">APPLICATION</div>
+      <strong id="v4Apps">0</strong>
+      <p>Шалгах хүсэлт</p>
+      <span class="command-chip red">REVIEW</span>
+    </div>
+    <div class="command-card">
+      <div class="command-label">DATABASE</div>
+      <strong style="font-size:24px">FIREBASE</strong>
+      <p>Cloud Firestore</p>
+      <span class="command-chip">CONNECTED</span>
+    </div>
+  </div>
+
+  <div class="command-grid">
+    <div class="command-panel">
+      <div class="command-panel-head"><div><h3>Шуурхай удирдлага</h3><span>COMMAND SHORTCUTS</span></div><div class="signal"><i></i> LIVE</div></div>
+      <div class="command-body">
+        <div class="action-grid">
+          <button class="action-tile" data-go="members"><div class="action-icon">👥</div><b>Гишүүн нэмэх</b><small>Roster-д шинэ гишүүн бүртгэх</small></button>
+          <button class="action-tile" data-go="applications"><div class="action-icon">📨</div><b>Хүсэлтүүд</b><small>Шинэ элсэлтийн хүсэлтүүдийг шалгах</small></button>
+          <button class="action-tile" data-go="garage"><div class="action-icon">🏎️</div><b>Garage build</b><small>Шинэ машин showcase-д нэмэх</small></button>
+          <button class="action-tile" data-go="meet"><div class="action-icon">👹</div><b>ONI Meet</b><small>Meet үүсгэх, countdown, room ID/pass</small></button>
+          <button class="action-tile" data-go="settings"><div class="action-icon">⚙️</div><b>Website тохиргоо</b><small>Нүүрний dynamic мэдээлэл шинэчлэх</small></button>
+        </div>
+      </div>
+    </div>
+
+    <div class="command-panel">
+      <div class="command-panel-head"><div><h3>Roster бүтэц</h3><span>ROLE DISTRIBUTION</span></div></div>
+      <div class="command-body">
+        <div class="role-bars">
+          <div class="role-row"><label>LEADER</label><div class="role-track"><div id="barLeader" class="role-fill gold" style="width:0%"></div></div><b id="countLeader">0</b></div>
+          <div class="role-row"><label>CO-LEADER</label><div class="role-track"><div id="barCo" class="role-fill blue" style="width:0%"></div></div><b id="countCo">0</b></div>
+          <div class="role-row"><label>SPECIAL</label><div class="role-track"><div id="barSpecial" class="role-fill purple" style="width:0%"></div></div><b id="countSpecial">0</b></div>
+          <div class="role-row"><label>MEMBER</label><div class="role-track"><div id="barMember" class="role-fill" style="width:0%"></div></div><b id="countMember">0</b></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="command-grid" style="margin-top:14px">
+    <div class="command-panel">
+      <div class="command-panel-head"><div><h3>Сүүлийн үйл ажиллагаа</h3><span>LIVE SNAPSHOT</span></div><button class="btn" data-go="analytics">Бүгдийг харах</button></div>
+      <div class="command-body"><div id="activityFeed" class="activity"></div></div>
+    </div>
+
+    <div class="command-panel">
+      <div class="command-panel-head"><div><h3>Системийн төлөв</h3><span>HEALTH</span></div><div class="signal"><i></i> OK</div></div>
+      <div class="command-body">
+        <div class="metric-row"><span>AUTHENTICATION</span><b>Firebase Auth</b></div>
+        <div class="metric-row"><span>DATABASE</span><b>Cloud Firestore</b></div>
+        <div class="metric-row"><span>HOSTING</span><b>GitHub Pages</b></div>
+        <div class="metric-row"><span>CAPACITY</span><b id="v4CapacityPct">0%</b></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+      <section id="garage" class="view">
+        <div class="herohead"><div><div class="eyebrow">02 / GARAGE CONTROL</div><h1>GARAGE<br><span style="color:var(--red)">MANAGER.</span></h1><p>Бодит машинуудын showcase мэдээллийг эндээс нэмнэ. Website Garage автоматаар шинэчлэгдэнэ.</p></div><button class="btn red" id="newGarageBtn">＋ NEW BUILD</button></div>
+        <div class="panel"><div class="panel-head"><div><h2>Collection</h2><div class="muted"><span id="garageCount">0</span> builds</div></div><input id="garageSearch" class="field search" placeholder="Search build..."></div><div id="garageList" class="garage-admin"></div></div>
+      </section>
+
+      <section id="members" class="view">
+        <div class="herohead"><div><div class="eyebrow">03 / CLAN ROSTER</div><h1>MEMBER<br><span style="color:var(--red)">CONTROL.</span></h1><p>Role, CPM Nick, CPM ID болон member мэдээллийг удирдана.</p></div><button class="btn red" id="newMemberBtn">＋ NEW MEMBER</button></div>
+        <div class="panel"><div class="panel-head"><div><h2>Roster</h2><div class="muted"><span id="memberCount">0</span> / 52</div></div><input id="memberSearch" class="field search" placeholder="Search member..."></div><div id="memberList" class="members"></div><div id="memberMsg" class="msg"></div></div>
+      </section>
+
+      <section id="applications" class="view">
+        <div class="herohead"><div><div class="eyebrow">04 / RECRUITMENT</div><h1>APPLICATION<br><span style="color:var(--red)">REVIEW.</span></h1><p>Ирсэн хүсэлтийг шалгаж, approve хийхэд Members системд автоматаар нэмнэ.</p></div><button class="btn" id="refreshApps">↻ REFRESH</button></div>
+        <div class="panel"><div class="panel-head"><div><h2>Incoming applications</h2><div class="muted"><span id="appCount">0</span> requests</div></div></div><div id="appList" class="applications"></div><div id="appMsg" class="msg"></div></div>
+      </section>
+
+      
+<section id="market" class="view"><div class="herohead"><div><div class="eyebrow">05 / MARKET CONTROL</div><h1>ONI<br><span style="color:var(--red)">MARKET.</span></h1><p>Үйлчилгээ болон зарагдах машинуудыг нэмэх, үнэ, үлдэгдэл, зураг, ангиллыг удирдана.</p></div><button class="btn red" id="newProductBtn">＋ NEW PRODUCT</button></div><div class="stats"><div class="stat"><small>PRODUCTS</small><strong id="marketCount">0</strong><em>live catalog</em></div><div class="stat"><small>ORDERS</small><strong id="orderCount">0</strong><em>all orders</em></div><div class="stat"><small>PENDING</small><strong id="pendingOrderCount">0</strong><em>new requests</em></div><div class="stat"><small>VALUE</small><strong id="marketValue">0₮</strong><em>catalog value</em></div></div><div class="panel"><div class="panel-head"><div><h2>Products</h2><div class="muted">23 service category + custom cars</div></div><input id="productSearch" class="field search" placeholder="Search product..."></div><div id="productList" class="garage-admin"></div></div><div class="panel"><div class="panel-head"><div><h2>Orders</h2><div class="muted">Захиалгын төлөвийг эндээс шинэчилнэ.</div></div><button class="btn" id="refreshOrders">↻ REFRESH</button></div><div id="orderList" class="applications"></div></div></section>
+<section id="gallery" class="view"><div class="herohead"><div><div class="eyebrow">06 / GALLERY CONTROL</div><h1>ONI<br><span style="color:var(--red)">GALLERY.</span></h1><p>Anime, Clean, Drift, Rare build-үүдийн зураг, owner, build мэдээллийг удирдана.</p></div><button class="btn red" id="newGalleryBtn">＋ NEW IMAGE</button></div><div class="panel"><div class="panel-head"><div><h2>Showcase</h2><div class="muted"><span id="galleryCountAdmin">0</span> images</div></div></div><div id="galleryAdminList" class="garage-admin"></div></div></section>
+
+
+<section id="music" class="view">
+  <div class="herohead"><div><div class="eyebrow">ONI RADIO / MUSIC CONTROL</div><h1>Music Library</h1><p class="muted">Дууг нэг нэгээр нь нэмээд website дээр publish хийнэ.</p></div><button class="btn red" id="newMusicBtn" type="button">＋ ADD SONG</button></div>
+  <div class="panel" style="margin-top:14px"><div class="panel-head"><div><h2>Music Library</h2><div class="muted"><span id="musicCount">0</span> published songs</div></div><input id="musicSearch" class="search" placeholder="Search song / artist"></div><div id="musicList" class="applications" style="margin-top:12px"></div></div>
+  <div class="modal" id="musicModal" aria-hidden="true"><div class="backdrop" data-close-music></div><div class="modal-card"><button class="close" type="button" data-close-music>×</button><div class="eyebrow">ONI RADIO</div><h2 id="musicModalTitle">ADD SONG</h2>
+    <div class="grid2">
+      <div class="field"><label>SONG TITLE *</label><input id="musicTitle" placeholder="MIDNIGHT DRIVE"></div>
+      <div class="field"><label>ARTIST *</label><input id="musicArtist" placeholder="ONI RADIO"></div>
+      <div class="field" style="grid-column:1/-1"><label>AUDIO URL *</label><input id="musicUrl" type="url" placeholder="https://example.com/song.mp3"><small class="muted">Шууд тоглуулах http/https audio URL оруулна.</small></div>
+      <div class="field" style="grid-column:1/-1"><label>COVER IMAGE URL (OPTIONAL)</label><input id="musicCover" type="url" placeholder="https://example.com/cover.jpg"></div>
+      <div class="field"><label>ORDER</label><input id="musicOrder" type="number" min="1" step="1" value="1"></div>
+      <div class="field"><label>STATUS</label><select id="musicStatus"><option value="published">PUBLISHED</option><option value="hidden">HIDDEN</option></select></div>
+    </div>
+    <div class="toolbar" style="margin-top:15px"><button class="btn red" id="saveMusic" type="button">PUBLISH SONG</button><button class="btn" data-close-music type="button">CANCEL</button></div><div id="musicMsg" class="msg"></div>
+  </div></div>
+</section>
+
+<section id="meet" class="view">
+  <div class="herohead">
+    <div><div class="eyebrow">06 / LIVE EVENT CONTROL</div><h1>ONI<br><span style="color:var(--red)">MEET.</span></h1><p>CPM Meet-ийн өдөр, цаг, room ID/password болон 20 хүний capacity-г эндээс удирдана. Website countdown болон realtime participant бүртгэл автоматаар шинэчлэгдэнэ.</p></div>
+  </div>
+  <div class="grid2">
+    <div class="panel">
+      <div class="panel-head"><div><h2>Create / Update Current Meet</h2><div class="muted">Public website дээр нэг л active meet харагдана.</div></div><span class="badge leader">MAX 20</span></div>
+      <div class="grid2">
+        <div class="field"><label>MEET NAME *</label><input id="meetName" placeholder="ONI NIGHT MEET #01"></div>
+        <div class="field"><label>ROOM LABEL</label><input id="meetRoomLabel" placeholder="CPM 1 · NIGHT CITY"></div>
+        <div class="field"><label>DATE *</label><input id="meetDate" type="date"></div>
+        <div class="field"><label>START TIME *</label><input id="meetTime" type="time" step="1"></div>
+        <div class="field"><label>DURATION (MINUTES)</label><input id="meetDuration" type="number" min="1" max="120" value="20"></div>
+        <div class="field"><label>ROOM ID *</label><input id="meetRoomId" placeholder="123456"></div>
+        <div class="field"><label>PASSWORD *</label><input id="meetPassword" placeholder="ONI2026"></div>
+        <div class="field"><label>CAPACITY</label><input value="20 PLAYERS" disabled></div>
+      </div>
+      <div class="toolbar" style="margin-top:15px"><button class="btn red" id="saveMeet">PUBLISH / UPDATE MEET</button><button class="btn danger" id="disableMeet">END / HIDE MEET</button><button class="btn danger" id="deleteMeet" type="button">🗑 DELETE MEET</button></div>
+      <div id="meetAdminMsg" class="msg"></div>
+    </div>
+    <div class="panel">
+      <div class="panel-head"><div><h2>Live Status</h2><div class="muted">Realtime participant snapshot.</div></div><button class="btn" id="refreshMeetParticipants">↻ REFRESH</button><button class="btn danger" id="clearFinishedMeetParticipants" type="button" style="margin-left:8px">🗑 CLEAR FINISHED</button></div>
+      <div class="stats" style="margin-bottom:0"><div class="stat"><small>STATUS</small><strong id="adminMeetStatus">—</strong><em id="adminMeetCountdown">—</em></div><div class="stat"><small>JOINED</small><strong id="adminMeetCount">0 / 20</strong><em>website verified</em></div></div>
+      <div id="adminMeetPlayers" class="members" style="margin-top:12px"></div>
+    </div>
+  </div>
+</section>
+
+<section id="analytics" class="view">
+  <div class="herohead">
+    <div><div class="eyebrow">06 / CLAN INTELLIGENCE</div><h1>DATA<br><span style="color:var(--red)">CENTER.</span></h1><p>Одоогийн Firebase өгөгдлөөс автоматаар тооцсон clan-ийн тойм статистик.</p></div>
+    <button class="btn" id="analyticsRefresh">↻ ШИНЭЧЛЭХ</button>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><small>ROSTER FILL</small><strong id="aFill">0%</strong><em>52 capacity</em></div>
+    <div class="stat"><small>LEADERSHIP</small><strong id="aLeadership">0</strong><em>leader + co-leader</em></div>
+    <div class="stat"><small>SPECIAL</small><strong id="aSpecial">0</strong><em>special members</em></div>
+    <div class="stat"><small>PENDING</small><strong id="aPending">0</strong><em>applications</em></div>
+  </div>
+
+  <div class="analytics-grid">
+    <div class="command-panel">
+      <div class="command-panel-head"><div><h3>Roster хуваарилалт</h3><span>MEMBER MIX</span></div></div>
+      <div class="command-body">
+        <div id="analyticsBars" class="bar-chart"></div>
+      </div>
+    </div>
+    <div class="command-panel">
+      <div class="command-panel-head"><div><h3>Элсэлтийн урсгал</h3><span>RECRUITMENT</span></div></div>
+      <div class="command-body">
+        <div class="funnel">
+          <div class="funnel-step"><span>Нийт хүсэлт</span><b id="fTotal">0</b></div>
+          <div class="funnel-step"><span>Хүлээгдэж буй</span><b id="fPending">0</b></div>
+          <div class="funnel-step"><span>Зөвшөөрсөн</span><b id="fApproved">0</b></div>
+          <div class="funnel-step"><span>Татгалзсан</span><b id="fRejected">0</b></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="command-panel" style="margin-top:14px">
+    <div class="command-panel-head"><div><h3>Garage бүтэц</h3><span>BUILD CATEGORIES</span></div></div>
+    <div class="command-body"><div id="garageMetrics" class="grid3"></div></div>
+  </div>
+</section>
+
+<section id="settings" class="view">
+        <div class="herohead"><div><div class="eyebrow">05 / SITE CONTROL</div><h1>WEBSITE<br><span style="color:var(--red)">SETTINGS.</span></h1><p>Website-ийн dynamic content-ийг Firebase-ийн <code>site/content</code> document-д хадгална.</p></div><button class="btn red" id="saveSettings">SAVE CHANGES</button></div>
+        <div class="panel"><div class="grid2">
+          <div class="field"><label>SITE TITLE</label><input id="siteTitle"></div><div class="field"><label>LOGO URL</label><input id="logoUrl"></div>
+          <div class="field"><label>HERO TITLE</label><input id="heroTitle"></div><div class="field"><label>SHOP LINK</label><input id="shopLink"></div>
+          <div class="field" style="grid-column:1/-1"><label>HERO TEXT</label><textarea id="heroText"></textarea></div>
+          <div class="field" style="grid-column:1/-1"><label>JOIN TEXT</label><textarea id="joinText"></textarea></div>
+        </div><div id="settingsMsg" class="msg"></div></div>
+      </section>
+    </div>
+  </main>
+</div>
+
+<div id="garageModal" class="modal"><div class="backdrop" data-close></div><div class="modal-card"><button class="close" data-close>×</button><div class="eyebrow">GARAGE / BUILD EDITOR</div><h2 id="garageModalTitle" style="font-size:28px;letter-spacing:-.04em;margin:8px 0 20px">New Build</h2><div class="grid2">
+<div class="field"><label>CAR NAME *</label><input id="gName" placeholder="ITASHA R33"></div>
+<div class="field"><label>OWNER</label><input id="gOwner" placeholder="Kitsune"></div>
+<div class="field"><label>ANIME / THEME</label><input id="gAnime" placeholder="Anime title / Original"></div>
+<div class="field"><label>CATEGORY</label><select id="gCategory"><option value="anime">ANIME</option><option value="clean">CLEAN</option><option value="drift">DRIFT</option><option value="rare">RARE</option></select></div>
+<div class="field"><label>CPM ID</label><input id="gCpm" placeholder="ONI0001"></div>
+<div class="field"><label>LAYER</label><input id="gLayer" placeholder="450 / 450"></div>
+<div class="field" style="grid-column:1/-1"><label>IMAGE URL</label><input id="gImage" placeholder="https://...jpg"></div><div class="field" style="grid-column:1/-1"><label>OR UPLOAD IMAGE</label><input id="gImageFile" type="file" accept="image/jpeg,image/png,image/webp,image/gif"><div id="gImageUploadMsg" class="muted" style="margin-top:6px">Зураг сонгоод SAVE BUILD дарахад зураг шахагдаж Firestore-д хадгалагдана. Storage / Blaze шаардлагагүй.</div></div>
+<div class="field" style="grid-column:1/-1"><label>BUILD DESCRIPTION</label><textarea id="gDesc" placeholder="Itasha livery, wheels, stance..."></textarea></div>
+</div><div class="toolbar" style="margin-top:15px"><button class="btn red" id="saveGarage">SAVE BUILD</button><button class="btn" data-close>CANCEL</button></div><div id="garageMsg" class="msg"></div></div></div>
+
+<div id="memberModal" class="modal"><div class="backdrop" data-close-member></div><div class="modal-card"><button class="close" data-close-member>×</button><div class="eyebrow">MEMBERS / PROFILE</div><h2 style="font-size:28px;letter-spacing:-.04em;margin:8px 0 20px">New Member</h2><div class="grid2"><div class="field"><label>NAME</label><input id="mName"></div><div class="field"><label>CPM NICK *</label><input id="mNick"></div><div class="field"><label>CPM ID *</label><input id="mId"></div><div class="field"><label>ROLE</label><select id="mRole"><option value="member">Member</option><option value="leader">Leader</option><option value="co-leader">Co Leader</option><option value="special">Special Member</option></select></div><div class="field" style="grid-column:1/-1"><label>TITLE</label><input id="mTitle" placeholder="Special Member • Drifter"></div></div><div class="toolbar" style="margin-top:15px"><button class="btn red" id="saveMember">ADD MEMBER</button><button class="btn" data-close-member>CANCEL</button></div><div id="memberModalMsg" class="msg"></div></div></div>
+
+<div id="productModal" class="modal"><div class="backdrop" data-close-product></div><div class="modal-card"><button class="close" data-close-product>×</button><div class="eyebrow">MARKET / PRODUCT EDITOR</div><h2 id="productModalTitle" style="font-size:28px;letter-spacing:-.04em;margin:8px 0 20px">New Product</h2><div class="grid2"><div class="field"><label>NAME *</label><input id="pName" placeholder="W16 / Name Color / Police"></div><div class="field"><label>CATEGORY</label><select id="pCategory"><option value="car">Car</option><option value="service">Service</option><option value="account">Account</option><option value="custom">Custom</option><option value="unlock">Unlock</option><option value="currency">Money / Coins</option></select></div><div class="field"><label>PRICE ₮</label><input id="pPrice" type="number" min="0"></div><div class="field"><label>STOCK</label><input id="pStock" type="number" min="0" placeholder="1"></div><div class="field"><label>TYPE / BADGE</label><input id="pType" placeholder="ANIME / SERVICE / RARE"></div><div class="field"><label>SUBTITLE</label><input id="pSubtitle" placeholder="Anime / Itasha"></div><div class="field" style="grid-column:1/-1"><label>IMAGE URL</label><input id="pImage" placeholder="https://..."></div><div class="field" style="grid-column:1/-1"><label>DESCRIPTION</label><textarea id="pDesc" placeholder="Product details..."></textarea></div></div><div class="toolbar" style="margin-top:15px"><button class="btn red" id="saveProduct">PUBLISH PRODUCT</button><button class="btn" data-close-product>CANCEL</button></div><div id="productMsg" class="msg"></div></div></div>
+<div id="galleryAdminModal" class="modal"><div class="backdrop" data-close-gallery-admin></div><div class="modal-card"><button class="close" data-close-gallery-admin>×</button><div class="eyebrow">GALLERY / SHOWCASE EDITOR</div><h2 style="font-size:28px;letter-spacing:-.04em;margin:8px 0 20px">New Gallery Image</h2><div class="grid2"><div class="field"><label>TITLE *</label><input id="gaTitle" placeholder="MIKU R33"></div><div class="field"><label>CATEGORY</label><select id="gaCategory"><option value="anime">ANIME</option><option value="clean">CLEAN</option><option value="drift">DRIFT</option><option value="rare">RARE</option></select></div><div class="field"><label>OWNER</label><input id="gaOwner"></div><div class="field"><label>BUILD</label><input id="gaBuild" placeholder="Night Spec / OEM+"></div><div class="field" style="grid-column:1/-1"><label>IMAGE URL *</label><input id="gaImage" placeholder="https://..."></div></div><div class="toolbar" style="margin-top:15px"><button class="btn red" id="saveGallery">PUBLISH IMAGE</button><button class="btn" data-close-gallery-admin>CANCEL</button></div><div id="galleryAdminMsg" class="msg"></div></div></div>
+
+<div id="toast" class="toast"></div>
+
+<script type="module">
+import{initializeApp}from"https://www.gstatic.com/firebasejs/12.17.1/firebase-app.js";
+import{getAuth,signInWithEmailAndPassword,sendPasswordResetEmail,onAuthStateChanged,signOut}from"https://www.gstatic.com/firebasejs/12.17.1/firebase-auth.js";
+import{getFirestore,collection,doc,getDoc,setDoc,addDoc,getDocs,deleteDoc,updateDoc,serverTimestamp,query,where}from"https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore.js";
+const firebaseConfig={apiKey:"AIzaSyDt0DjUhafGZ2D-co3ZhZlIde_Qe1K5trw",authDomain:"oni-kishin-f59b4.firebaseapp.com",projectId:"oni-kishin-f59b4",storageBucket:"oni-kishin-f59b4.firebasestorage.app",messagingSenderId:"523789047478",appId:"1:523789047478:web:c7e250d094c38abe61f817",measurementId:"G-TCZM9S9ZDT"};
+const app=initializeApp(firebaseConfig),auth=getAuth(app),db=getFirestore(app),ADMIN_EMAIL="erkaa130@gmail.com",$=id=>document.getElementById(id);
+const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]));
+function msg(el,text,type="err"){el.textContent=text;el.className="msg show "+type}
+function toast(t){$("toast").textContent=t;$("toast").classList.add("show");setTimeout(()=>$("toast").classList.remove("show"),2200)}
+function compressGarageImage(file,maxSide=1600,quality=.82){
+  return new Promise((resolve,reject)=>{
+    const reader=new FileReader();
+    reader.onerror=()=>reject(new Error("IMAGE_READ_ERROR"));
+    reader.onload=()=>{
+      const img=new Image();
+      img.onerror=()=>reject(new Error("IMAGE_DECODE_ERROR"));
+      img.onload=()=>{
+        const scale=Math.min(1,maxSide/Math.max(img.naturalWidth,img.naturalHeight));
+        const w=Math.max(1,Math.round(img.naturalWidth*scale));
+        const h=Math.max(1,Math.round(img.naturalHeight*scale));
+        const canvas=document.createElement("canvas");
+        canvas.width=w;canvas.height=h;
+        const ctx=canvas.getContext("2d",{alpha:false});
+        ctx.drawImage(img,0,0,w,h);
+        canvas.toBlob(blob=>{
+          if(!blob)return reject(new Error("IMAGE_COMPRESS_ERROR"));
+          resolve(blob);
+        },"image/jpeg",quality);
+      };
+      img.src=reader.result;
+    };
+    reader.readAsDataURL(file);
+  });
+}
+window.uploadGarageImage = async function uploadGarageImage(file){
+  // Firebase Storage ашиглахгүй.
+  // Зургийг browser дээр шахаад JPEG data URL болгон Firestore document-д хадгална.
+  const blob=await compressGarageImage(file,900,.68);
+  if(!blob) throw new Error("IMAGE_COMPRESS_ERROR");
+
+  // Firestore document 1 MiB хязгаартай тул зураг хэт том бол хадгалахгүй.
+  const MAX_IMAGE_BYTES=650*1024;
+  if(blob.size>MAX_IMAGE_BYTES){
+    throw new Error("IMAGE_TOO_LARGE");
+  }
+
+  const reader=new FileReader();
+  return await new Promise((resolve,reject)=>{
+    reader.onerror=()=>reject(new Error("IMAGE_READ_ERROR"));
+    reader.onload=()=>resolve(String(reader.result||""));
+    reader.readAsDataURL(blob);
+  });
+};
+
+$("loginBtn").onclick=async()=>{const e=$("email").value.trim().toLowerCase(),p=$("password").value;if(e!==ADMIN_EMAIL)return msg($("loginMsg"),"Энэ email admin эрхгүй.");if(!p)return msg($("loginMsg"),"Нууц үгээ оруулна уу.");try{await signInWithEmailAndPassword(auth,e,p)}catch(err){console.error(err);msg($("loginMsg"),"Email эсвэл нууц үг буруу байна.")}};
+$("forgotBtn").onclick=async()=>{const e=$("email").value.trim().toLowerCase();if(e!==ADMIN_EMAIL)return msg($("loginMsg"),"Admin Gmail-ээ оруулна уу.");try{await sendPasswordResetEmail(auth,e);msg($("loginMsg"),"Reset холбоос Gmail рүү илгээгдлээ.","ok")}catch(e){msg($("loginMsg"),"Reset email илгээж чадсангүй.")}};
+$("logoutBtn").onclick=()=>signOut(auth);
+const views=[...document.querySelectorAll(".view")],navs=[...document.querySelectorAll(".navbtn[data-view]")];
+function go(id){views.forEach(v=>v.classList.toggle("active",v.id===id));navs.forEach(n=>n.classList.toggle("active",n.dataset.view===id));$("topTitle").textContent={overview:"Command Center",garage:"Garage Manager",members:"Member Control",applications:"Application Review",analytics:"Clan Analytics",settings:"Website Settings",market:"ONI Market",gallery:"ONI Gallery",meet:"ONI Meet Control",music:"ONI Music Control"}[id]||id;$("side").classList.remove("open");if(id==="garage")loadGarage();if(id==="members")loadMembers();if(id==="applications")loadApps();if(id==="settings")loadSettings();if(id==="market"){loadProducts();loadOrders()}if(id==="gallery")loadGalleryAdmin();if(id==="music")loadMusic();if(id==="meet")loadMeetAdmin()}
+navs.forEach(n=>n.onclick=()=>go(n.dataset.view));document.querySelectorAll("[data-go]").forEach(b=>b.onclick=()=>go(b.dataset.go));$("menuBtn").onclick=()=>$("side").classList.toggle("open");
+const roleText=r=>({leader:"LEADER","co-leader":"CO LEADER",special:"SPECIAL MEMBER",member:"MEMBER"}[r]||"MEMBER"),roleClass=r=>r==="leader"?"leader":r==="co-leader"?"co":r==="special"?"special":"";
+let garageData=[],memberData=[],appData=[],editingGarageId=null;
+let musicData=[],editingMusicId=null;
+
+function clearMusicForm(){["musicTitle","musicArtist","musicUrl","musicCover"].forEach(id=>$(id).value="");$("musicOrder").value=(musicData.length+1)||1;$("musicStatus").value="published";editingMusicId=null;$("musicModalTitle").textContent="ADD SONG";$("saveMusic").textContent="PUBLISH SONG";$("musicMsg").className="msg";$("musicMsg").textContent=""}
+async function loadMusic(){try{const s=await getDocs(collection(db,"music"));musicData=s.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>(Number(a.order)||999999)-(Number(b.order)||999999));renderMusic()}catch(e){console.error("Music load:",e);toast("Music уншихад алдаа: "+(e?.code||e?.message||"unknown"))}}
+function renderMusic(){const q=($("musicSearch")?.value||"").trim().toLowerCase(),list=musicData.filter(x=>(`${x.title||""} ${x.artist||""}`).toLowerCase().includes(q));$("musicCount").textContent=musicData.filter(x=>x.status!=="hidden").length;if(!list.length){$("musicList").innerHTML='<div class="empty">Одоогоор дуу нэмэгдээгүй байна.</div>';return}$("musicList").innerHTML=list.map(x=>`<article class="application" style="display:flex!important;align-items:center;justify-content:space-between;gap:12px"><div style="display:flex;align-items:center;gap:12px;min-width:0"><div style="width:54px;height:54px;border-radius:12px;background:#111;display:grid;place-items:center;overflow:hidden;flex:none">${x.cover?`<img src="${esc(x.cover)}" alt="" style="width:100%;height:100%;object-fit:cover" onerror="this.style.display='none'">`:"🎵"}</div><div style="min-width:0"><div style="font-size:14px;font-weight:900">${esc(x.title||"UNTITLED")}</div><div class="muted">${esc(x.artist||"Unknown")} · #${esc(x.order||"—")}</div><div style="margin-top:5px">${x.status==="hidden"?'<span class="badge">HIDDEN</span>':'<span class="badge leader">PUBLISHED</span>'}</div></div></div><div class="toolbar" style="margin:0;flex-shrink:0"><button class="btn" type="button" data-edit-music="${esc(x.id)}">EDIT</button><button class="btn" type="button" data-toggle-music="${esc(x.id)}">${x.status==="hidden"?"PUBLISH":"HIDE"}</button><button class="btn danger" type="button" data-del-music="${esc(x.id)}">DELETE</button></div></article>`).join("");document.querySelectorAll("[data-edit-music]").forEach(b=>b.onclick=()=>editMusic(b.dataset.editMusic));document.querySelectorAll("[data-toggle-music]").forEach(b=>b.onclick=()=>toggleMusic(b.dataset.toggleMusic));document.querySelectorAll("[data-del-music]").forEach(b=>b.onclick=()=>deleteMusic(b.dataset.delMusic))}
+function editMusic(id){const x=musicData.find(v=>v.id===id);if(!x)return;editingMusicId=id;$("musicModalTitle").textContent="EDIT SONG";$("saveMusic").textContent="SAVE CHANGES";$("musicTitle").value=x.title||"";$("musicArtist").value=x.artist||"";$("musicUrl").value=x.file||"";$("musicCover").value=x.cover||"";$("musicOrder").value=Number(x.order)||1;$("musicStatus").value=x.status==="hidden"?"hidden":"published";$("musicMsg").className="msg";$("musicModal").classList.add("open")}
+async function toggleMusic(id){const x=musicData.find(v=>v.id===id);if(!x)return;try{await updateDoc(doc(db,"music",id),{status:x.status==="hidden"?"published":"hidden",updatedAt:serverTimestamp(),updatedBy:ADMIN_EMAIL});await loadMusic();toast(x.status==="hidden"?"Song published":"Song hidden")}catch(e){console.error(e);toast("Music status өөрчлөхөд алдаа: "+(e?.code||"unknown"))}}
+async function deleteMusic(id){if(!confirm("Энэ дууг устгах уу?"))return;try{await deleteDoc(doc(db,"music",id));await loadMusic();toast("Song устгагдлаа")}catch(e){console.error(e);toast("Song устгахад алдаа: "+(e?.code||"unknown"))}}
+document.getElementById("newMusicBtn")?.addEventListener("click",()=>{clearMusicForm();$("musicModal").classList.add("open")});document.querySelectorAll("[data-close-music]").forEach(b=>b.addEventListener("click",()=>$("musicModal").classList.remove("open")));$("musicSearch")?.addEventListener("input",renderMusic);
+$("saveMusic")?.addEventListener("click",async()=>{const title=$("musicTitle").value.trim(),artist=$("musicArtist").value.trim(),file=$("musicUrl").value.trim(),cover=$("musicCover").value.trim(),order=Math.max(1,Number($("musicOrder").value||1)),status=$("musicStatus").value==="hidden"?"hidden":"published";if(!title)return msg($("musicMsg"),"Song title заавал оруулна уу.");if(!artist)return msg($("musicMsg"),"Artist заавал оруулна уу.");if(!file)return msg($("musicMsg"),"Audio URL заавал оруулна уу.");try{const u=new URL(file);if(!/^https?:$/.test(u.protocol))throw 0}catch(e){return msg($("musicMsg"),"Audio URL буруу байна. http/https URL оруулна уу.")}const btn=$("saveMusic");btn.disabled=true;try{const data={title,artist,file,cover,order,status,updatedAt:serverTimestamp(),updatedBy:ADMIN_EMAIL};const wasEdit=!!editingMusicId;if(wasEdit)await updateDoc(doc(db,"music",editingMusicId),data);else await addDoc(collection(db,"music"),{...data,createdAt:serverTimestamp(),createdBy:ADMIN_EMAIL});$("musicModal").classList.remove("open");clearMusicForm();await loadMusic();toast(wasEdit?"Song шинэчлэгдлээ":"Song нэмэгдлээ ✓")}catch(e){console.error("Music save:",e);msg($("musicMsg"),"Дуу хадгалахад алдаа: "+(e?.code||e?.message||"unknown"))}finally{btn.disabled=false}});
+async function loadGarage(){try{const s=await getDocs(collection(db,"garage"));garageData=s.docs.map(d=>({id:d.id,...d.data()}));renderGarage()}catch(e){console.error(e);toast("Garage алдаа: "+(e?.code||"unknown"))}}
+function renderGarage(){const q=$("garageSearch").value.trim().toLowerCase();const list=garageData.filter(x=>(`${x.name} ${x.owner} ${x.anime} ${x.category}`).toLowerCase().includes(q));$("garageCount").textContent=garageData.length;$("v4Garage").textContent=garageData.length;if(!list.length){$("garageList").innerHTML='<div class="empty" style="grid-column:1/-1">Garage build алга. ＋ NEW BUILD дарж эхний машинаа нэм.</div>';return}$("garageList").innerHTML=list.map(x=>`<article class="garage-item"><div class="garage-thumb">${x.image?`<img src="${esc(x.image)}" alt="${esc(x.name)}">`:'<div class="placeholder">🚗</div>'}</div><div class="garage-info"><div class="badge ${x.category==="anime"?"special":""}">${esc(String(x.category||"").toUpperCase())}</div><h3>${esc(x.name)}</h3><p>${esc(x.owner||"")} · ${esc(x.anime||"Original")} · ${esc(x.layer||"")}</p><div class="garage-actions"><button class="btn" data-edit-g="${x.id}">EDIT</button><button class="btn danger" data-del-g="${x.id}">DELETE</button></div></div></article>`).join("");if(typeof renderV4Dashboard==="function")renderV4Dashboard();if(typeof renderAnalytics==="function")renderAnalytics();document.querySelectorAll("[data-edit-g]").forEach(b=>b.onclick=()=>openGarage(b.dataset.editG))}
+$("garageSearch").oninput=renderGarage;
+function openGarage(id=null){editingGarageId=id;$("garageModalTitle").textContent=id?"Edit Build":"New Build";const x=id?garageData.find(a=>a.id===id):{};$("gName").value=x.name||"";$("gOwner").value=x.owner||"";$("gAnime").value=x.anime||"";$("gCategory").value=x.category||"anime";$("gCpm").value=x.cpmId||"";$("gLayer").value=x.layer||"";$("gImage").value=x.image||"";$("gDesc").value=x.description||"";$("garageModal").classList.add("open")}
+$("newGarageBtn").onclick=()=>openGarage();document.querySelectorAll("[data-close]").forEach(b=>b.onclick=()=>{$("garageModal").classList.remove("open")});
+$("saveGarage").onclick=async()=>{const name=$("gName").value.trim(),file=$("gImageFile")?.files?.[0];if(!name)return msg($("garageMsg"),"Car name заавал оруулна уу.");if(file&&file.size>25*1024*1024)return msg($("garageMsg"),"Зураг 25MB-аас бага байх ёстой.");const saveBtn=$("saveGarage");saveBtn.disabled=true;saveBtn.textContent="PREPARING...";try{let image=$("gImage").value.trim();if(file){$("gImageUploadMsg").textContent="Зургийг багасгаж байна...";image=await uploadGarageImage(file);$("gImage").value=image;$("gImageUploadMsg").textContent="Зураг амжилттай байршууллаа ✓"}const data={name,owner:$("gOwner").value.trim(),anime:$("gAnime").value.trim(),category:$("gCategory").value,cpmId:$("gCpm").value.trim(),layer:$("gLayer").value.trim(),image,description:$("gDesc").value.trim(),updatedAt:serverTimestamp(),updatedBy:ADMIN_EMAIL};saveBtn.textContent="SAVING...";if(editingGarageId)await updateDoc(doc(db,"garage",editingGarageId),data);else await addDoc(collection(db,"garage"),{...data,createdAt:serverTimestamp(),createdBy:ADMIN_EMAIL});$("garageModal").classList.remove("open");await loadGarage();toast(editingGarageId?"Build шинэчлэгдлээ":"Build нэмэгдлээ")}catch(e){console.error(e);const text=e?.message==="IMAGE_TOO_LARGE"?"Зураг хэт том байна. Илүү бага хэмжээтэй зураг сонгоно уу.":"Зураг/гараж хадгалахад алдаа: "+(e?.code||e?.message||"unknown");msg($("garageMsg"),text)}finally{saveBtn.disabled=false;saveBtn.textContent="SAVE BUILD"}};
+async function deleteGarage(id){if(!confirm("Энэ build-ийг устгах уу?"))return;try{await deleteDoc(doc(db,"garage",id));await loadGarage();toast("Build устгагдлаа")}catch(e){toast("Устгах боломжгүй байна")}}
+function isRosterMember(m){
+  const applicationFields=["age","gender","direction","contactType","contact","experience","message","status"];
+  const looksLikeApplication=applicationFields.some(k=>Object.prototype.hasOwnProperty.call(m,k));
+  return !!m.source || !!m.applicationId || !looksLikeApplication;
+}
+async function loadMembers(){try{const s=await getDocs(collection(db,"members"));memberData=s.docs.map(d=>({id:d.id,...d.data()})).filter(isRosterMember);renderMembers()}catch(e){toast("Members уншихад алдаа")}}
+function renderMembers(){const q=$("memberSearch").value.trim().toLowerCase();const list=memberData.filter(x=>(`${x.name} ${x.nick} ${x.cpmid} ${x.role}`).toLowerCase().includes(q));$("memberCount").textContent=memberData.length;$("v4Capacity").textContent=`${memberData.length} / 52`;if(!list.length){$("memberList").innerHTML='<div class="empty" style="grid-column:1/-1">Гишүүн олдсонгүй.</div>';return}$("memberList").innerHTML=list.map(m=>`<article class="member"><div class="member-top"><div><div class="nick">${esc(m.nick||"Unnamed")}</div><div class="meta">${esc(m.name||"")} · ${esc(m.cpmid||"")}</div></div><span class="badge ${roleClass(m.role)}">${roleText(m.role)}</span></div><div class="muted" style="margin-top:10px">${esc(m.title||"ONI & KISHIN MEMBER")}</div><div class="garage-actions"><select data-role="${m.id}" class="btn" style="flex:1"><option value="member" ${m.role==="member"?"selected":""}>Member</option><option value="leader" ${m.role==="leader"?"selected":""}>Leader</option><option value="co-leader" ${m.role==="co-leader"?"selected":""}>Co Leader</option><option value="special" ${m.role==="special"?"selected":""}>Special</option></select><button class="btn" data-save-m="${m.id}">SAVE</button><button type="button" class="btn danger" data-del-m="${esc(m.id)}">DELETE</button></div></article>`).join("");if(typeof renderV4Dashboard==="function")renderV4Dashboard();if(typeof renderAnalytics==="function")renderAnalytics();document.querySelectorAll("[data-save-m]").forEach(b=>b.onclick=async()=>{const role=document.querySelector(`[data-role="${b.dataset.saveM}"]`).value;await updateDoc(doc(db,"members",b.dataset.saveM),{role});await loadMembers();toast("Role хадгалагдлаа")});document.querySelectorAll("[data-del-m]").forEach(b=>b.onclick=async()=>{const id=b.dataset.delM;if(!id)return;if(b.dataset.confirmed!=="1"){b.dataset.confirmed="1";b.textContent="CONFIRM DELETE";setTimeout(()=>{if(b.isConnected&&b.dataset.confirmed==="1"){b.dataset.confirmed="0";b.textContent="DELETE"}},3000);return}try{b.disabled=true;await deleteDoc(doc(db,"members",id));await loadMembers();toast("Гишүүн устгагдлаа")}catch(err){console.error(err);b.disabled=false;b.dataset.confirmed="0";b.textContent="DELETE";toast("Member delete: "+(err?.code||err?.message||"unknown"))}});$("memberSearch").oninput=renderMembers;$("newMemberBtn").onclick=()=>{$("memberModal").classList.add("open")};document.querySelectorAll("[data-close-member]").forEach(b=>b.onclick=()=>$("memberModal").classList.remove("open"));
+$("saveMember").onclick=async()=>{const name=$("mName").value.trim(),nick=$("mNick").value.trim(),cpmid=$("mId").value.trim(),role=$("mRole").value,title=$("mTitle").value.trim();if(!nick||!cpmid)return msg($("memberModalMsg"),"CPM Nick болон CPM ID заавал.");if(memberData.length>=52)return msg($("memberModalMsg"),"52 member capacity хүрсэн.");try{await addDoc(collection(db,"members"),{name,nick,cpmid,role,title,source:"manual",createdAt:serverTimestamp(),createdBy:ADMIN_EMAIL});$("memberModal").classList.remove("open");["mName","mNick","mId","mTitle"].forEach(id=>$(id).value="");await loadMembers();toast("Member нэмэгдлээ")}catch(e){msg($("memberModalMsg"),"Member нэмэхэд алдаа гарлаа")}};
+}
+async function loadApps(){try{const s=await getDocs(collection(db,"applications"));appData=s.docs.map(d=>({id:d.id,data:d.data()})).sort((a,b)=>(b.data.createdAt?.seconds||0)-(a.data.createdAt?.seconds||0));renderApps()}catch(e){toast("Applications уншихад алдаа")}}
+function renderApps(){
+  const pending=appData.filter(x=>{
+    const st=String(x?.data?.status??"Шинэ").trim();
+    return !["Зөвшөөрсөн","Татгалзсан"].includes(st);
+  });
+  $("appCount").textContent=pending.length;
+  $("v4Apps").textContent=pending.length;
+  const list=$("appList");
+  if(!list)return;
+  list.style.display="grid";
+  list.style.gap="12px";
+  if(!pending.length){
+    list.innerHTML='<div class="empty">Шинэ application алга. ✦</div>';
+    return;
+  }
+  try{
+    list.innerHTML=pending.map((x,idx)=>{
+      const d=x?.data||{};
+      const fullName=[d.firstName||d.first,d.lastName||d.last].filter(Boolean).join(" ")||"Нэр оруулаагүй";
+      const nick=d.nickname||d.nick||"—";
+      const cpmid=d.cpmId||d.cpmid||"—";
+      const role=d.role||"MEMBER";
+      const contact=d.contact||"—";
+      const type=d.contactType||"—";
+      const direction=d.direction||"—";
+      const experience=d.experience||"—";
+      const message=d.message||"";
+      return `<article class="application" style="display:block!important;visibility:visible!important;opacity:1!important;color:#f7f7fb">
+        <div class="panel-head">
+          <div>
+            <h2 style="margin:0;color:#fff">${esc(fullName)}</h2>
+            <div class="muted">${esc(nick)} · ${esc(cpmid)}</div>
+          </div>
+          <span class="badge">${esc(d.status||"ШИНЭ")}</span>
+        </div>
+        <div class="app-grid">
+          <div class="mini"><small>НАС / ХҮЙС</small><b>${esc(d.age||"—")} / ${esc(d.gender||"—")}</b></div>
+          <div class="mini"><small>ЧИГЛЭЛ</small><b>${esc(direction)}</b></div>
+          <div class="mini"><small>ХОЛБОО</small><b>${esc(contact)}</b></div>
+          <div class="mini"><small>ХУГАЦАА</small><b>${esc(experience)}</b></div>
+        </div>
+        ${message?`<div class="mini" style="margin-bottom:12px"><small>ӨӨРИЙН ТУХАЙ</small><b style="line-height:1.45">${esc(message)}</b></div>`:""}
+        <div class="toolbar">
+          <button class="btn green" data-approve="${esc(x.id)}">✓ ЗӨВШӨӨРӨХ</button>
+          <button class="btn danger" data-reject="${esc(x.id)}">ТАТГАЛЗАХ</button>
+          <button class="btn" data-del-app="${esc(x.id)}">УСТГАХ</button>
+        </div>
+      </article>`;
+    }).join("");
+    list.querySelectorAll("[data-approve]").forEach(b=>b.onclick=()=>approveApp(b.dataset.approve));
+    list.querySelectorAll("[data-reject]").forEach(b=>b.onclick=async()=>{
+      try{await updateDoc(doc(db,"applications",b.dataset.reject),{status:"Татгалзсан",reviewedAt:serverTimestamp(),reviewedBy:ADMIN_EMAIL});await loadApps();toast("Хүсэлтийг татгалзлаа")}
+      catch(e){console.error(e);toast("Татгалзахад алдаа гарлаа")}
+    });
+    list.querySelectorAll("[data-del-app]").forEach(b=>b.onclick=async()=>{
+      if(!confirm("Application устгах уу?"))return;
+      try{await deleteDoc(doc(db,"applications",b.dataset.delApp));await loadApps();toast("Application устгагдлаа")}
+      catch(e){console.error(e);toast("Устгахад алдаа гарлаа")}
+    });
+  }catch(e){
+    console.error("renderApps error:",e);
+    list.innerHTML='<div class="empty" style="color:#ff9da6">Хүсэлтүүдийг дэлгэцэнд гаргахад алдаа гарлаа. REFRESH дарж дахин оролдоно уу.</div>';
+  }
+}
+async function approveApp(id){try{const ref=doc(db,"applications",id),s=await getDoc(ref);if(!s.exists())return;const d=s.data();if(memberData.length>=52)return toast("52 member capacity хүрсэн.");await addDoc(collection(db,"members"),{name:[d.firstName||d.first,d.lastName||d.last].filter(Boolean).join(" "),nick:d.nickname||d.nick||"",cpmid:d.cpmId||d.cpmid||"",role:"member",title:"MEMBER",source:"application",createdAt:serverTimestamp(),applicationId:id});await updateDoc(ref,{status:"Зөвшөөрсөн",reviewedAt:serverTimestamp(),reviewedBy:ADMIN_EMAIL});await loadMembers();await loadApps();toast("Application approved → Member")}catch(e){console.error(e);toast("Approve хийхэд алдаа")}}
+$("refreshApps").onclick=loadApps;
+
+/* ---------- MARKET / GALLERY CONTROL ---------- */
+let productData=[],orderData=[],galleryAdminData=[],editingProductId=null;
+const seedServices=[
+ ["Money","currency","Money","💵","Мөнгө"],["Coins","currency","Coins","🪙","Coin"],["Clone Cars","service","Clone Cars","🧬","Машин clone"],["Clone Accounts","account","Clone Accounts","👤","Account clone"],["Copy Livery","custom","Copy Livery","🎨","Livery хуулбар"],["Unlock All Cars","unlock","Unlock All Cars","🔓","Бүх машин unlock"],["Unlock Paid Cars","unlock","Unlock Paid Cars","💎","Төлбөртэй машин unlock"],["Police Unlocked","unlock","Police Unlocked","🚓","Police unlock"],["Engine Unlocked","unlock","Engine Unlocked","⚙️","Engine unlock"],["All Houses Unlocked","unlock","All Houses Unlocked","🏠","Бүх house unlock"],["Smoke Unlocked","custom","Smoke Unlocked","💨","Smoke unlock"],["Mileage","service","Mileage","🛣️","Mileage тохируулах"],["Front Bumper","custom","Front Bumper","🔧","Урд bumper"],["Rear Bumper","custom","Rear Bumper","🔧","Арын bumper"],["Bloom","custom","Bloom","✨","Bloom effect"],["King Rank","currency","King Rank","👑","King rank"],["Full Unlock","unlock","Full Unlock","⚡","Animation • Horns • Gear • Levels"],["Change ID","account","Change ID","🪪","ID солих"],["Set Wins / Loses","account","Set Wins / Loses","🏆","Wins / Loses тохируулах"],["Name Color","custom","Name Color","🌈","Нэрний өнгө"],["Change Email","account","Change Email","✉️","Email солих"],["Change ID • 2","account","Change ID • 2","🪪","ID солих • дахин өөрчлөх"],["Change Password","account","Change Password","🔐","Password солих"]
+];
+function slugName(v){return String(v||"").trim().toLowerCase().replace(/•/g," ").replace(/[^a-z0-9а-яё\s-]/gi,"").replace(/\s+/g," ")}
+function serviceVisual(name,icon,category){
+  const palette={currency:["#ff334d","#6d2bff"],service:["#ff4658","#ff8a4c"],account:["#7a5cff","#3f8cff"],custom:["#ff3b81","#8a5cff"],unlock:["#ff2038","#ffb84d"]}[category]||["#ff2038","#7657ff"];
+  const svg=`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 420"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop stop-color="${palette[0]}" stop-opacity=".85"/><stop offset="1" stop-color="${palette[1]}" stop-opacity=".8"/></linearGradient><filter id="b"><feGaussianBlur stdDeviation="28"/></filter></defs><rect width="800" height="420" fill="#09090f"/><circle cx="650" cy="90" r="150" fill="url(#g)" opacity=".25" filter="url(#b)"/><circle cx="160" cy="330" r="150" fill="url(#g)" opacity=".16" filter="url(#b)"/><rect x="28" y="28" width="744" height="364" rx="34" fill="none" stroke="white" stroke-opacity=".08"/><text x="52" y="88" fill="white" fill-opacity=".48" font-family="Arial" font-size="22" font-weight="700">ONI &amp; KISHIN</text><text x="52" y="305" fill="white" font-size="48" font-family="Arial" font-weight="900">${esc(icon)}</text><text x="125" y="300" fill="white" font-size="30" font-family="Arial" font-weight="900">${esc(name)}</text><text x="52" y="348" fill="white" fill-opacity=".42" font-size="16" font-family="Arial" letter-spacing="3">${esc(String(category||"SERVICE").toUpperCase())} SERVICE</text></svg>`;
+  return 'data:image/svg+xml;charset=UTF-8,'+encodeURIComponent(svg);
+}
+async function loadProducts(){try{const s=await getDocs(collection(db,"products"));productData=s.docs.map(d=>({id:d.id,...d.data()}));renderProducts()}catch(e){console.error(e);toast("Market уншихад алдаа")}}
+function renderProducts(){
+  const q=$("productSearch")?.value.trim().toLowerCase()||"";
+  const liveByName=new Map(productData.map(p=>[slugName(p.name),p]));
+  const list=seedServices.map(([name,category,type,icon,subtitle])=>{
+    const live=liveByName.get(slugName(name));
+    return live?{...live,_service:true,icon:live.icon||icon,subtitle:live.subtitle||subtitle}:{id:`service:${slugName(name)}`,_service:true,name,category,price:0,stock:null,type,icon,subtitle,description:"ONI & KISHIN premium service."};
+  }).filter(x=>(`${x.name} ${x.category} ${x.type} ${x.subtitle}`).toLowerCase().includes(q));
+  $("marketCount").textContent=seedServices.length;
+  $("marketValue").textContent=new Intl.NumberFormat("mn-MN").format(list.reduce((a,x)=>a+Number(x.price||0),0))+"₮";
+  $("productList").innerHTML=list.map(p=>`<article class="garage-item market-service-card"><div class="garage-thumb"><img src="${esc(p.image||serviceVisual(p.name,p.icon||"✦",p.category))}" alt="${esc(p.name)}"></div><div class="garage-info"><div class="muted">${esc(String(p.category||"SERVICE").toUpperCase())} · ${esc(p.type||"")}</div><h3>${esc(p.name||"")}</h3><p>${esc(p.subtitle||"")} </p><div class="grid2" style="margin-top:10px"><div class="field"><label>ҮНЭ ₮</label><input type="number" min="0" value="${Number(p.price||0)}" data-service-price="${esc(p.name)}"></div><div class="field"><label>ШИРХЭГ / STOCK</label><input type="number" min="0" value="${p.stock===null||p.stock===undefined?"":esc(p.stock)}" placeholder="∞" data-service-stock="${esc(p.name)}"></div></div><div class="garage-actions"><button class="btn red" data-save-service="${esc(p.name)}">SAVE</button>${p.id&&!String(p.id).startsWith("service:")?`<button class="btn danger" data-del-p="${esc(p.id)}">DELETE</button>`:""}</div></div></article>`).join("")||'<div class="empty" style="grid-column:1/-1">Service олдсонгүй.</div>';
+  document.querySelectorAll("[data-save-service]").forEach(b=>b.onclick=async()=>{
+    const name=b.dataset.saveService, existing=productData.find(x=>slugName(x.name)===slugName(name));
+    const def=seedServices.find(x=>x[0]===name); if(!def)return;
+    const priceEl=document.querySelector(`[data-service-price="${CSS.escape(name)}"]`),stockEl=document.querySelector(`[data-service-stock="${CSS.escape(name)}"]`);
+    const data={name,category:def[1],type:def[2],icon:def[3],subtitle:def[4],price:Number(priceEl?.value||0),stock:stockEl?.value===""?null:Number(stockEl.value),image:existing?.image||serviceVisual(name,def[3],def[1]),description:existing?.description||"ONI & KISHIN premium service.",updatedAt:serverTimestamp(),updatedBy:ADMIN_EMAIL};
+    try{if(existing)await updateDoc(doc(db,"products",existing.id),data);else await setDoc(doc(db,"products",slugName(name).replace(/\s+/g,"-")),{...data,createdAt:serverTimestamp(),createdBy:ADMIN_EMAIL});await loadProducts();toast(name+" хадгалагдлаа")}catch(e){console.error(e);toast("Service хадгалахад алдаа: "+(e?.code||"unknown"))}
+  });
+  document.querySelectorAll("[data-del-p]").forEach(b=>b.onclick=async()=>{if(!confirm("Product устгах уу?"))return;try{await deleteDoc(doc(db,"products",b.dataset.delP));await loadProducts();toast("Product устгагдлаа")}catch(e){console.error(e);toast("Устгахад алдаа")}});
+}
+function clearProduct(){["pName","pPrice","pStock","pType","pSubtitle","pImage","pDesc"].forEach(id=>$(id).value="");$("pCategory").value="service";editingProductId=null;$("productModalTitle").textContent="New Product"}
+function editProduct(id){const p=productData.find(x=>x.id===id);if(!p)return;editingProductId=id;$("productModalTitle").textContent="Edit Product";$("pName").value=p.name||"";$("pCategory").value=p.category||"service";$("pPrice").value=p.price||0;$("pStock").value=p.stock??"";$("pType").value=p.type||"";$("pSubtitle").value=p.subtitle||"";$("pImage").value=p.image||"";$("pDesc").value=p.description||"";$("productModal").classList.add("open")}
+$("newProductBtn").onclick=()=>{clearProduct();$("productModal").classList.add("open")};document.querySelectorAll("[data-close-product]").forEach(b=>b.onclick=()=>$("productModal").classList.remove("open"));$("productSearch").oninput=renderProducts;
+$("saveProduct").onclick=async()=>{const name=$("pName").value.trim();if(!name)return msg($("productMsg"),"Product name заавал.");const data={name,category:$("pCategory").value,price:Number($("pPrice").value||0),stock:$("pStock").value===""?null:Number($("pStock").value),type:$("pType").value.trim(),subtitle:$("pSubtitle").value.trim(),image:$("pImage").value.trim(),description:$("pDesc").value.trim(),updatedAt:serverTimestamp(),updatedBy:ADMIN_EMAIL};try{if(editingProductId)await updateDoc(doc(db,"products",editingProductId),data);else await addDoc(collection(db,"products"),{...data,createdAt:serverTimestamp(),createdBy:ADMIN_EMAIL});$("productModal").classList.remove("open");await loadProducts();toast("Market product хадгалагдлаа")}catch(e){console.error(e);msg($("productMsg"),"Product хадгалахад алдаа гарлаа")}};
+async function loadOrders(){try{const s=await getDocs(collection(db,"orders"));orderData=s.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>(b.createdAt?.seconds||0)-(a.createdAt?.seconds||0));renderOrders()}catch(e){console.error(e);toast("Orders уншихад алдаа")}}
+function renderOrders(){const pending=orderData.filter(o=>!['Дууссан','Цуцалсан'].includes(o.status));$("orderCount").textContent=orderData.length;$("pendingOrderCount").textContent=pending.length;const list=$("orderList");if(!orderData.length){list.innerHTML='<div class="empty">Одоогоор захиалга алга.</div>';return}list.innerHTML=orderData.map(o=>`<article class="application"><div class="panel-head"><div><h2 style="margin:0">${esc(o.orderNo||"ONI ORDER")}</h2><div class="muted">${esc(o.productName||"")} × ${esc(o.quantity||1)} · ${new Intl.NumberFormat("mn-MN").format(o.total||0)}₮</div></div><span class="badge">${esc(o.status||"Шинэ")}</span></div><div class="app-grid"><div class="mini"><small>CPM</small><b>${esc(o.cpmNick||"—")} · ${esc(o.cpmId||"—")}</b></div><div class="mini"><small>INSTAGRAM</small><b>${esc(o.instagram||"—")}</b></div><div class="mini"><small>УТАС</small><b>${esc(o.phone||"—")}</b></div><div class="mini"><small>НИЙТ</small><b>${new Intl.NumberFormat("mn-MN").format(o.total||0)}₮</b></div></div><div class="toolbar"><select class="btn" data-order-status="${o.id}"><option ${o.status==="Шинэ"?"selected":""}>Шинэ</option><option ${o.status==="Төлбөр хүлээж байна"?"selected":""}>Төлбөр хүлээж байна</option><option ${o.status==="Төлбөр баталгаажсан"?"selected":""}>Төлбөр баталгаажсан</option><option ${o.status==="Бэлдэж байна"?"selected":""}>Бэлдэж байна</option><option ${o.status==="Дууссан"?"selected":""}>Дууссан</option><option ${o.status==="Цуцалсан"?"selected":""}>Цуцалсан</option></select><button class="btn danger" data-del-order="${o.id}">УСТГАХ</button></div></article>`).join("");document.querySelectorAll("[data-order-status]").forEach(s=>s.onchange=async()=>{await updateDoc(doc(db,"orders",s.dataset.orderStatus),{status:s.value,updatedAt:serverTimestamp(),updatedBy:ADMIN_EMAIL});await loadOrders();toast("Захиалгын төлөв шинэчлэгдлээ")});document.querySelectorAll("[data-del-order]").forEach(b=>b.onclick=async()=>{if(confirm("Захиалгыг устгах уу?")){await deleteDoc(doc(db,"orders",b.dataset.delOrder));await loadOrders();toast("Захиалга устгагдлаа")}})}
+$("refreshOrders").onclick=loadOrders;
+async function loadGalleryAdmin(){
+  try{
+    const s=await getDocs(collection(db,"gallery"));
+    galleryAdminData=s.docs.map(d=>({id:d.id,...d.data()}));
+    $("galleryCountAdmin").textContent=galleryAdminData.length;
+    $("galleryAdminList").innerHTML=galleryAdminData.length
+      ? galleryAdminData.map(g=>`<article class="garage-item"><div class="garage-thumb"><img src="${esc(g.image)}" alt=""></div><div class="garage-info"><div class="muted">${esc(String(g.category||"").toUpperCase())}</div><h3>${esc(g.title||"")}</h3><p>${esc(g.owner||"")} · ${esc(g.build||"")}</p><div class="garage-actions"><button type="button" class="btn danger" data-del-gallery="${esc(g.id)}">DELETE</button></div></div></article>`).join("")
+      : '<div class="empty" style="grid-column:1/-1">Gallery хоосон.</div>';
+
+    document.querySelectorAll("#galleryAdminList [data-del-gallery]").forEach(b=>{
+      b.onclick=async()=>{
+        const id=b.dataset.delGallery;
+        if(!id)return;
+        if(!window.confirm("Энэ Gallery зургийг устгах уу?"))return;
+        try{
+          b.disabled=true;
+          await deleteDoc(doc(db,"gallery",id));
+          await loadGalleryAdmin();
+          toast("Gallery зураг устгагдлаа");
+        }catch(err){
+          console.error("Gallery delete error:",err);
+          b.disabled=false;
+          toast("Gallery delete: "+(err?.code||err?.message||"unknown"));
+        }
+      };
+    });
+  }catch(e){
+    console.error("Gallery load error:",e);
+    toast("Gallery уншихад алдаа: "+(e?.code||e?.message||"unknown"));
+  }
+}
+$("newGalleryBtn").onclick=()=>{$("galleryAdminModal").classList.add("open")};document.querySelectorAll("[data-close-gallery-admin]").forEach(b=>b.onclick=()=>$("galleryAdminModal").classList.remove("open"));$("saveGallery").onclick=async()=>{const title=$("gaTitle").value.trim(),image=$("gaImage").value.trim();if(!title||!image)return msg($("galleryAdminMsg"),"Title болон Image URL заавал.");try{await addDoc(collection(db,"gallery"),{title,image,category:$("gaCategory").value,owner:$("gaOwner").value.trim(),build:$("gaBuild").value.trim(),createdAt:serverTimestamp(),createdBy:ADMIN_EMAIL});$("galleryAdminModal").classList.remove("open");["gaTitle","gaImage","gaOwner","gaBuild"].forEach(id=>$(id).value="");await loadGalleryAdmin();toast("Gallery зураг нийтлэгдлээ")}catch(e){console.error(e);msg($("galleryAdminMsg"),"Gallery хадгалахад алдаа гарлаа")}};
+
+async function loadSettings(){try{const s=await getDoc(doc(db,"site","content"));if(!s.exists())return;const d=s.data();["siteTitle","heroTitle","heroText","logoUrl","shopLink","joinText"].forEach(k=>$(k).value=d[k]||"")}catch(e){toast("Settings уншихад алдаа")}}
+$("saveSettings").onclick=async()=>{try{await setDoc(doc(db,"site","content"),{siteTitle:$("siteTitle").value.trim(),heroTitle:$("heroTitle").value.trim(),heroText:$("heroText").value.trim(),logoUrl:$("logoUrl").value.trim(),shopLink:$("shopLink").value.trim(),joinText:$("joinText").value.trim(),updatedAt:serverTimestamp(),updatedBy:ADMIN_EMAIL},{merge:true});msg($("settingsMsg"),"Website settings хадгалагдлаа.","ok");toast("Settings saved")}catch(e){msg($("settingsMsg"),"Settings хадгалах боломжгүй байна")}};
+
+function renderV4Dashboard(){
+  const total=memberData.length, cap=52;
+  const roles={leader:0,"co-leader":0,special:0,member:0};
+  memberData.forEach(m=>{roles[m.role]=(roles[m.role]||0)+1});
+  const pct=Math.min(100,Math.round(total/cap*100));
+  $("v4Capacity").textContent=`${total} / ${cap}`;
+  $("v4Garage").textContent=garageData.length;
+  const pending=appData.filter(x=>!["Зөвшөөрсөн","Татгалзсан"].includes(x.data.status)).length;
+  $("v4Apps").textContent=pending;
+  $("v4CapacityPct").textContent=pct+"%";
+  [["barLeader","countLeader",roles.leader],["barCo","countCo",roles["co-leader"]],["barSpecial","countSpecial",roles.special],["barMember","countMember",roles.member]].forEach(([bar,count,val])=>{
+    $(bar).style.width=(total?Math.max(2,val/Math.max(1,total)*100):0)+"%";$(count).textContent=val;
+  });
+  const activities=[];
+  memberData.slice(-4).reverse().forEach(m=>activities.push({i:"👤",t:`${m.nick||"Гишүүн"} roster-д байна`,s:`${roleText(m.role)} · ${m.cpmid||""}`}));
+  appData.slice(0,4).forEach(a=>{const d=a.data;activities.push({i:"📨",t:`${d.nickname||d.nick||"Шинэ хүсэлт"}`,s:`Application · ${d.cpmId||d.cpmid||""}`} )});
+  garageData.slice(-3).reverse().forEach(g=>activities.push({i:"🏎️",t:`${g.name||"Garage build"}`,s:`${String(g.category||"BUILD").toUpperCase()} · ${g.owner||""}`}));
+  const feed=activities.slice(0,7);
+  $("activityFeed").innerHTML=feed.length?feed.map(a=>`<div class="activity-item"><div class="activity-icon">${a.i}</div><div><b>${esc(a.t)}</b><span>${esc(a.s)}</span></div><time>LIVE</time></div>`).join(""):'<div class="empty">Одоогоор activity алга.</div>';
+}
+function renderAnalytics(){
+  const total=memberData.length, pending=appData.filter(x=>!["Зөвшөөрсөн","Татгалзсан"].includes(x.data.status)).length;
+  const approved=appData.filter(x=>x.data.status==="Зөвшөөрсөн").length;
+  const rejected=appData.filter(x=>x.data.status==="Татгалзсан").length;
+  const leaders=memberData.filter(m=>m.role==="leader"||m.role==="co-leader").length;
+  const special=memberData.filter(m=>m.role==="special").length;
+  $("aFill").textContent=Math.round(total/52*100)+"%";
+  $("aLeadership").textContent=leaders;$("aSpecial").textContent=special;$("aPending").textContent=pending;
+  $("fTotal").textContent=appData.length;$("fPending").textContent=pending;$("fApproved").textContent=approved;$("fRejected").textContent=rejected;
+  const roleCounts=[["LEADER",memberData.filter(m=>m.role==="leader").length],["CO",memberData.filter(m=>m.role==="co-leader").length],["SPECIAL",special],["MEMBER",memberData.filter(m=>!["leader","co-leader","special"].includes(m.role)).length]];
+  $("analyticsBars").innerHTML=roleCounts.map(([label,val])=>`<div class="bar" style="height:${Math.max(8,(val/Math.max(1,total))*145)}px"><b>${val}</b><small>${label}</small></div>`).join("");
+  const cats={ANIME:0,CLEAN:0,DRIFT:0,RARE:0};
+  garageData.forEach(g=>{const k=String(g.category||"").toUpperCase();cats[k]=(cats[k]||0)+1});
+  $("garageMetrics").innerHTML=Object.entries(cats).map(([k,v])=>`<div class="mini"><small>${k}</small><b style="font-size:22px">${v}</b></div>`).join("");
+}
+$("analyticsRefresh").onclick=async()=>{await Promise.allSettled([loadGarage(),loadMembers(),loadApps()]);renderAnalytics();toast("Статистик шинэчлэгдлээ")};
+
+async function boot(){await Promise.allSettled([loadGarage(),loadMembers(),loadApps(),loadSettings()]);renderV4Dashboard();renderAnalytics();$("v4Capacity").textContent=`${memberData.length} / 52`;$("v4Garage").textContent=garageData.length;$("v4Apps").textContent=appData.filter(x=>!["Зөвшөөрсөн","Татгалзсан"].includes(x.data.status)).length}
+onAuthStateChanged(auth,async user=>{if(user?.email?.toLowerCase()===ADMIN_EMAIL){$("loginView").classList.add("hidden");$("appView").classList.remove("hidden");$("sideEmail").textContent=user.email;await boot()}else{if(user)await signOut(auth);$("loginView").classList.remove("hidden");$("appView").classList.add("hidden")}});
+
+(function(){
+  const MEET_DOC='current', MAX=20;
+
+  function localDateTimeNow(){
+    const d=new Date(),p=n=>String(n).padStart(2,'0');
+    return {
+      date:`${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())}`,
+      time:`${p(d.getHours())}:${p(d.getMinutes())}:00`
+    };
+  }
+
+  // Supports the formats this project may receive from Firestore / JS.
+  function meetDateValue(v){
+    if(v==null)return null;
+    if(v instanceof Date)return isNaN(v.getTime())?null:v;
+    if(typeof v?.toDate==='function'){
+      const d=v.toDate();
+      return isNaN(d.getTime())?null:d;
+    }
+    if(typeof v==='number'){
+      const d=new Date(v<1e12?v*1000:v);
+      return isNaN(d.getTime())?null:d;
+    }
+    if(typeof v==='object'&&typeof v.seconds==='number'){
+      const d=new Date(v.seconds*1000);
+      return isNaN(d.getTime())?null:d;
+    }
+    const d=new Date(String(v));
+    return isNaN(d.getTime())?null:d;
+  }
+
+  function resetMeetForm(){
+    const n=localDateTimeNow();
+    $('meetDate').value=n.date;
+    $('meetTime').value=n.time;
+    $('meetName').value='ONI NIGHT MEET';
+    $('meetRoomLabel').value='';
+    $('meetDuration').value=20;
+    $('meetRoomId').value='';
+    $('meetPassword').value='';
+  }
+
+  window.loadMeetAdmin=async function(){
+    try{
+      const s=await getDoc(doc(db,'meets',MEET_DOC));
+
+      // No current Meet = clean form.
+      if(!s.exists()){
+        resetMeetForm();
+        renderMeetAdmin(null);
+        await refreshMeetParticipants();
+        return;
+      }
+
+      const m=s.data();
+
+      // Disabled Meet is treated as no active Meet.
+      if(m.enabled===false){
+        resetMeetForm();
+        renderMeetAdmin(null);
+        await refreshMeetParticipants();
+        return;
+      }
+
+      $('meetName').value=m.name||'';
+      $('meetRoomLabel').value=m.roomLabel||'';
+      $('meetDuration').value=m.durationMinutes||20;
+      $('meetRoomId').value=m.roomId||'';
+      $('meetPassword').value=m.password||'';
+
+      const d=meetDateValue(m.startAt);
+      if(d){
+        const p=n=>String(n).padStart(2,'0');
+        $('meetDate').value=`${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())}`;
+        $('meetTime').value=`${p(d.getHours())}:${p(d.getMinutes())}:${p(d.getSeconds())}`;
+      }
+
+      renderMeetAdmin(m);
+      await refreshMeetParticipants();
+    }catch(e){
+      console.error(e);
+      toast('Meet уншихад алдаа: '+(e?.code||e?.message||'unknown'));
+    }
+  };
+
+  function renderMeetAdmin(m){
+    if(!m||m.enabled===false){
+      $('adminMeetStatus').textContent='NO MEET';
+      $('adminMeetCountdown').textContent='Ready for new Meet';
+      return;
+    }
+
+    const start=meetDateValue(m.startAt);
+    if(!start){
+      $('adminMeetStatus').textContent='INVALID TIME';
+      $('adminMeetCountdown').textContent='startAt буруу';
+      return;
+    }
+
+    const startMs=start.getTime();
+    const endMs=startMs+Math.max(1,Number(m.durationMinutes||20))*60000;
+    const now=Date.now();
+
+    if(now<startMs){
+      const totalSec=Math.floor((startMs-now)/1000);
+      const days=Math.floor(totalSec/86400);
+      const hours=Math.floor((totalSec%86400)/3600);
+      const mins=Math.floor((totalSec%3600)/60);
+      const secs=totalSec%60;
+      $('adminMeetStatus').textContent='COUNTDOWN';
+      $('adminMeetCountdown').textContent=
+        (days?String(days).padStart(2,'0')+'d ':'')+
+        String(hours).padStart(2,'0')+':'+
+        String(mins).padStart(2,'0')+':'+
+        String(secs).padStart(2,'0');
+      return;
+    }
+
+    if(now<endMs){
+      const totalSec=Math.floor((endMs-now)/1000);
+      const mins=Math.floor(totalSec/60);
+      const secs=totalSec%60;
+      $('adminMeetStatus').textContent='LIVE';
+      $('adminMeetCountdown').textContent=
+        String(mins).padStart(2,'0')+':'+String(secs).padStart(2,'0')+' remaining';
+      return;
+    }
+
+    $('adminMeetStatus').textContent='ENDED';
+    $('adminMeetCountdown').textContent='Finished';
+  }
+
+  window.refreshMeetParticipants=async function(){
+    try{
+      const s=await getDocs(collection(db,'meetParticipants'));
+      const active=await getDoc(doc(db,'meets',MEET_DOC));
+      const meet=active.exists()?active.data():null;
+
+      const arr=s.docs
+        .map(d=>({id:d.id,...d.data()}))
+        .filter(x=>meet&&meet.enabled!==false&&x.meetId===MEET_DOC);
+
+      $('adminMeetCount').textContent=`${Math.min(MAX,arr.length)} / ${MAX}`;
+      $('adminMeetPlayers').innerHTML=arr.map(x=>`
+        <article class="member">
+          <div class="member-top">
+            <div>
+              <div class="nick">${esc(x.nick||'ONI MEMBER')}</div>
+              <div class="meta">${esc(x.cpmId||'')} · JOINED</div>
+            </div>
+            <span class="badge leader">LIVE</span>
+          </div>
+        </article>`).join('')||
+        '<div class="empty" style="grid-column:1/-1">Одоогоор participant алга.</div>';
+    }catch(e){
+      console.error(e);
+      toast('Meet participant: '+(e?.code||e?.message||'unknown'));
+    }
+  };
+
+  // PUBLISH / UPDATE:
+  // First delete old participant records, then write the new startAt.
+  // This is the ONLY place that changes Meet data.
+  document.getElementById('saveMeet')?.addEventListener('click',async()=>{
+    const name=$('meetName').value.trim();
+    const date=$('meetDate').value;
+    const time=$('meetTime').value;
+    const roomId=$('meetRoomId').value.trim();
+    const password=$('meetPassword').value.trim();
+
+    if(!name||!date||!time||!roomId||!password)
+      return msg($('meetAdminMsg'),'Meet name, date, time, Room ID, password бүгд шаардлагатай.');
+
+    const start=new Date(`${date}T${time}`);
+    if(isNaN(start.getTime()))
+      return msg($('meetAdminMsg'),'Огноо/цаг буруу байна.');
+
+    const duration=Math.min(120,Math.max(1,Number($('meetDuration').value||20)));
+
+    if(start.getTime()<=Date.now())
+      return msg($('meetAdminMsg'),'Шинэ Meet-ийн эхлэх цаг одоогийн цагаас хойш байх ёстой.');
+
+    const btn=$('saveMeet');
+    btn.disabled=true;
+
+    try{
+      const old=await getDocs(
+        query(collection(db,'meetParticipants'),where('meetId','==',MEET_DOC))
+      );
+      await Promise.all(old.docs.map(d=>deleteDoc(d.ref)));
+
+      await setDoc(doc(db,'meets',MEET_DOC),{
+        name,
+        roomLabel:$('meetRoomLabel').value.trim(),
+        startAt:start.toISOString(),
+        durationMinutes:duration,
+        roomId,
+        password,
+        maxPlayers:MAX,
+        enabled:true,
+        updatedAt:serverTimestamp(),
+        updatedBy:ADMIN_EMAIL
+      },{merge:true});
+
+      msg($('meetAdminMsg'),'✓ ШИНЭ MEET НИЙТЛЭГДЛЭЭ. Хуучин participant цэвэрлэгдсэн.','ok');
+      await loadMeetAdmin();
+    }catch(e){
+      console.error(e);
+      msg($('meetAdminMsg'),'Meet хадгалахад алдаа: '+(e?.code||e?.message||'unknown'));
+    }finally{
+      btn.disabled=false;
+    }
+  });
+
+  document.getElementById('disableMeet')?.addEventListener('click',async()=>{
+    try{
+      await setDoc(doc(db,'meets',MEET_DOC),{
+        enabled:false,
+        updatedAt:serverTimestamp(),
+        updatedBy:ADMIN_EMAIL
+      },{merge:true});
+      msg($('meetAdminMsg'),'Meet hidden/ended ✓','ok');
+      await loadMeetAdmin();
+    }catch(e){
+      toast('Meet disable: '+(e?.code||e?.message||'unknown'));
+    }
+  });
+
+  // Delete ONLY Meet data + Meet participants.
+  document.getElementById('deleteMeet')?.addEventListener('click',async()=>{
+    if(!confirm('Одоогийн Meet болон бүх participant-ийг устгах уу?'))return;
+
+    const btn=$('deleteMeet');
+    btn.disabled=true;
+
+    try{
+      const participants=await getDocs(
+        query(collection(db,'meetParticipants'),where('meetId','==',MEET_DOC))
+      );
+      await Promise.all(participants.docs.map(d=>deleteDoc(d.ref)));
+
+      const meet=await getDoc(doc(db,'meets',MEET_DOC));
+      if(meet.exists())await deleteDoc(doc(db,'meets',MEET_DOC));
+
+      resetMeetForm();
+      renderMeetAdmin(null);
+      await refreshMeetParticipants();
+      msg($('meetAdminMsg'),'✓ Хуучин Meet бүрэн устгагдлаа. Шинэ Meet нээхэд бэлэн.','ok');
+    }catch(e){
+      console.error(e);
+      toast('Meet delete: '+(e?.code||e?.message||'unknown'));
+    }finally{
+      btn.disabled=false;
+    }
+  });
+
+  document.getElementById('refreshMeetParticipants')?.addEventListener('click',refreshMeetParticipants);
+
+  setInterval(()=>{
+    if(document.getElementById('meet')?.classList.contains('active')){
+      getDoc(doc(db,'meets',MEET_DOC))
+        .then(s=>renderMeetAdmin(s.exists()?s.data():null))
+        .catch(()=>{});
+    }
+  },1000);
+})();</script>
+
+<script id="oniMeetFinishedClearModule" type="module">
+import{getApps,getApp,initializeApp}from"https://www.gstatic.com/firebasejs/12.17.1/firebase-app.js";
+import{getFirestore,collection,doc,getDoc,getDocs,query,where,deleteDoc}from"https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore.js";
+
+const cfg={apiKey:"AIzaSyDt0DjUhafGZ2D-co3ZhZlIde_Qe1K5trw",authDomain:"oni-kishin-f59b4.firebaseapp.com",projectId:"oni-kishin-f59b4",storageBucket:"oni-kishin-f59b4.firebasestorage.app",messagingSenderId:"523789047478",appId:"1:523789047478:web:c7e250d094c38abe61f817",measurementId:"G-TCZM9S9ZDT"};
+const app=getApps().length?getApp():initializeApp(cfg),db=getFirestore(app),MEET_DOC="current";
+const btn=document.getElementById("clearFinishedMeetParticipants");
+
+function toastText(t){
+  const el=document.getElementById("toast");
+  if(el){el.textContent=t;el.classList.add("show");setTimeout(()=>el.classList.remove("show"),2400)}
+  else alert(t);
+}
+
+async function clearFinishedMeetParticipants(){
+  if(!btn)return;
+  btn.disabled=true;
+  try{
+    const meetSnap=await getDoc(doc(db,"meets",MEET_DOC));
+    if(!meetSnap.exists()){
+      toastText("Одоогийн Meet олдсонгүй.");
+      return;
+    }
+
+    const meet=meetSnap.data();
+    const startMs=new Date(meet.startAt).getTime();
+    const durationMs=Math.max(1,Number(meet.durationMinutes||20))*60000;
+    const endMs=startMs+durationMs;
+
+    if(!Number.isFinite(startMs)){
+      toastText("Meet-ийн эхлэх цаг буруу байна.");
+      return;
+    }
+    if(Date.now()<endMs){
+      toastText("Meet хараахан дуусаагүй байна.");
+      return;
+    }
+
+    const ok=confirm("Дууссан энэ Meet-ийн бүх participant-ийг устгах уу?");
+    if(!ok)return;
+
+    const snap=await getDocs(query(collection(db,"meetParticipants"),where("meetId","==",MEET_DOC)));
+    if(!snap.size){
+      toastText("Устгах participant алга.");
+      return;
+    }
+
+    await Promise.all(snap.docs.map(d=>deleteDoc(d.ref)));
+
+    if(typeof window.refreshMeetParticipants==="function"){
+      await window.refreshMeetParticipants();
+    }
+    toastText(`${snap.size} participant устгагдлаа ✓`);
+  }catch(e){
+    console.error("Clear finished Meet participants:",e);
+    toastText("Устгахад алдаа: "+(e?.code||e?.message||"unknown"));
+  }finally{
+    btn.disabled=false;
+  }
+}
+
+btn?.addEventListener("click",clearFinishedMeetParticipants);
+</script>
+
+</body>
+</html>
