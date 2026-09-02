@@ -32,6 +32,19 @@ header .nav{height:calc(76px + env(safe-area-inset-top))}
 .oni-pwa-prompt{position:fixed;right:max(16px,env(safe-area-inset-right));bottom:max(16px,env(safe-area-inset-bottom));z-index:1000002;width:min(360px,calc(100vw - 32px));padding:15px;border:1px solid rgba(255,255,255,.14);border-radius:18px;background:rgba(12,12,17,.96);box-shadow:0 24px 70px rgba(0,0,0,.6);display:none}.oni-pwa-prompt.show{display:flex;gap:12px;align-items:center}.oni-pwa-prompt img{width:42px;height:42px;border-radius:12px}.oni-pwa-prompt-copy{min-width:0;flex:1}.oni-pwa-prompt b{display:block;font-size:12px}.oni-pwa-prompt span{display:block;margin-top:3px;color:#a6a6b1;font-size:10px;line-height:1.35}.oni-pwa-prompt button{border:0;border-radius:10px;padding:9px 10px;background:#ff2033;color:#fff;font:inherit;font-size:10px;font-weight:900}.oni-pwa-prompt .oni-pwa-dismiss{padding:6px;background:transparent;color:#aaa;font-size:18px}@media(display-mode:standalone){.oni-pwa-prompt{display:none!important}}@media(prefers-reduced-motion:reduce){.oni-pwa-splash,.oni-pwa-splash i:after{animation:none;transition:none}}
 </style>
 
+<style id="oni-app-experience">
+.oni-network-status{position:fixed;z-index:1000003;top:max(10px,env(safe-area-inset-top));left:50%;display:none;max-width:calc(100vw - 32px);padding:10px 13px;border:1px solid rgba(255,208,98,.32);border-radius:999px;background:rgba(28,21,10,.96);box-shadow:0 12px 45px rgba(0,0,0,.38);color:#ffe2a1;font-size:11px;font-weight:800;transform:translateX(-50%)}.oni-network-status.show{display:block}.oni-app-dashboard{display:none}.oni-intro.app-skip{animation:oniIntroOut .18s ease-out 0s forwards!important}.oni-intro.app-skip *{animation-duration:.18s!important;animation-delay:0s!important}
+@media(max-width:650px){
+  body{padding-bottom:calc(82px + env(safe-area-inset-bottom))}header .nav{height:calc(68px + env(safe-area-inset-top))}main{padding-top:calc(68px + env(safe-area-inset-top))}.hero{padding-top:46px}.hero-copy{font-size:15px;line-height:1.58}.hero-meta{gap:9px;margin-top:22px;font-size:9px}.hero-meta span{padding:7px 8px;border:1px solid rgba(255,255,255,.08);border-radius:10px;background:rgba(255,255,255,.025)}
+  .oni-app-dashboard{display:grid;padding:0;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin:0 auto 8px;width:min(100% - 28px,560px)}.oni-app-dashboard-head{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;margin:4px 2px 1px;color:#a8a8b3;font-size:9px;font-weight:900;letter-spacing:.14em}.oni-app-dashboard-head b{color:#ff6b7a;font-size:8px}.oni-app-card{min-height:78px;padding:13px;border:1px solid rgba(255,255,255,.1);border-radius:17px;background:linear-gradient(145deg,rgba(255,255,255,.075),rgba(255,255,255,.025));box-shadow:0 12px 35px rgba(0,0,0,.18);color:#f7f7fb;text-decoration:none;touch-action:manipulation}.oni-app-card:active{transform:scale(.98);border-color:rgba(255,32,51,.45)}.oni-app-card i{display:block;font-style:normal;font-size:17px}.oni-app-card b{display:block;margin-top:7px;font-size:11px;letter-spacing:.03em}.oni-app-card small{display:block;margin-top:3px;color:#8b8b97;font-size:9px}.oni-app-card.primary{border-color:rgba(255,32,51,.38);background:linear-gradient(135deg,rgba(255,32,51,.22),rgba(141,92,255,.12))}.oni-app-card .app-live{color:#64e9b1}
+  .mobile-bar{left:8px;right:8px;bottom:max(8px,env(safe-area-inset-bottom));height:68px;padding:5px 4px;border-radius:21px;justify-content:space-between;background:rgba(7,8,12,.94);box-shadow:0 14px 42px rgba(0,0,0,.6),0 0 0 1px rgba(255,255,255,.04) inset}.mobile-bar a{min-width:0;flex:1;padding:8px 2px 6px;font-size:8px;line-height:1.35}.mobile-bar a:active{transform:scale(.91)}.mobile-bar a.active:before{top:-7px}.mobile-bar a.active:after{bottom:-1px}.mobile-bar a:nth-child(n+6){display:none}
+  #oniAI{right:12px;bottom:calc(84px + env(safe-area-inset-bottom))}.oa-launch{width:56px;min-height:56px}.oa-win{position:fixed!important;right:10px!important;bottom:calc(78px + env(safe-area-inset-bottom))!important;width:calc(100vw - 20px)!important;height:min(660px,calc(100dvh - 96px - env(safe-area-inset-top) - env(safe-area-inset-bottom)))!important;border-radius:23px!important}.oa-tools{scrollbar-width:none}.oa-tools::-webkit-scrollbar{display:none}.oa-tool,.oa-btn{min-height:42px}.oa-hint{padding-bottom:calc(10px + env(safe-area-inset-bottom))}
+  .oni-pwa-prompt{bottom:calc(86px + env(safe-area-inset-bottom));width:calc(100vw - 28px)}.oni-network-status{top:calc(10px + env(safe-area-inset-top))}
+}
+@media(min-width:651px){.oni-app-dashboard{display:none}}
+@media(prefers-reduced-motion:reduce){.oni-app-card:active{transform:none}}
+</style>
+
 <style>
 :root{
   --bg:#050507;
@@ -2883,6 +2896,7 @@ body.oni-mode .oni-radio-panel{box-shadow:0 30px 100px rgba(0,0,0,.72),0 0 90px 
 
 <div class="oni-pwa-splash" id="oniPwaSplash" aria-label="ONI HUB is loading"><div class="oni-pwa-splash-card"><img src="icons/icon-192.png" alt=""><b>ONI HUB</b><i></i></div></div>
 <aside class="oni-pwa-prompt" id="oniPwaPrompt" aria-live="polite"><img src="icons/icon-192.png" alt=""><div class="oni-pwa-prompt-copy"><b id="oniPwaTitle">INSTALL ONI HUB</b><span id="oniPwaCopy">Open ONI HUB like an app.</span></div><button type="button" id="oniPwaAction">INSTALL</button><button class="oni-pwa-dismiss" type="button" id="oniPwaDismiss" aria-label="Dismiss">×</button></aside>
+<div class="oni-network-status" id="oniNetworkStatus" role="status" aria-live="polite">OFFLINE MODE · Cached ONI HUB is still available</div>
 
 <div class="px-progress" aria-hidden="true"><i></i></div>
 <div class="px-ambient" aria-hidden="true"><i class="px-orb a"></i><i class="px-orb b"></i><i class="px-orb c"></i></div>
@@ -2955,9 +2969,15 @@ body.oni-mode .oni-radio-panel{box-shadow:0 30px 100px rgba(0,0,0,.72),0 0 90px 
 
 <script>
 (function(){
-  function revealSite(){ document.body.classList.add("reveal-ready"); }
-  window.addEventListener("load",function(){ setTimeout(revealSite,3050); });
-  setTimeout(revealSite,3600);
+  const intro=document.getElementById("oniIntro");
+  const standalone=window.matchMedia("(display-mode: standalone)").matches||navigator.standalone===true;
+  const reduced=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  let returning=false;try{returning=sessionStorage.getItem("oniIntroSeen")==="1"}catch(e){}
+  const fastStart=standalone||reduced||returning;
+  if(fastStart)intro?.classList.add("app-skip");
+  function revealSite(){ document.body.classList.add("reveal-ready");try{sessionStorage.setItem("oniIntroSeen","1")}catch(e){} }
+  window.addEventListener("load",function(){ setTimeout(revealSite,fastStart?80:3050); });
+  setTimeout(revealSite,fastStart?220:3600);
 })();
 </script>
 
@@ -3019,6 +3039,14 @@ body.oni-mode .oni-radio-panel{box-shadow:0 30px 100px rgba(0,0,0,.72),0 0 90px 
       <div class="orb-card two">STYLE<b>ANIME × CLEAN × DRIFT</b></div>
     </div>
   </div>
+</section>
+
+<section class="oni-app-dashboard" aria-label="ONI HUB quick access">
+  <div class="oni-app-dashboard-head"><span>ONI HUB / QUICK ACCESS</span><b>LIVE APP</b></div>
+  <a class="oni-app-card primary" href="#oni-meet"><i>👹</i><b>ONI MEET</b><small id="oniAppMeetStatus">Check live event</small></a>
+  <a class="oni-app-card" href="#garage"><i>🏎️</i><b>GARAGE</b><small>Explore live builds</small></a>
+  <a class="oni-app-card" href="#members"><i>♙</i><b>PLAYERS</b><small><span id="oniAppMemberCount">0</span> / 52 roster</small></a>
+  <a class="oni-app-card" href="admin.html"><i>⚙️</i><b>COMMAND</b><small class="app-live">Admin entry</small></a>
 </section>
 
 <div class="ticker" aria-hidden="true">
@@ -3359,9 +3387,7 @@ body.oni-mode .oni-radio-panel{box-shadow:0 30px 100px rgba(0,0,0,.72),0 0 90px 
 <div class="mobile-bar">
   <a class="active" href="#home">⌂<br>HOME</a>
   <a href="#garage">◈<br>GARAGE</a>
-  <a href="#events">✦<br>EVENTS</a>
   <a class="oni-meet-mobile-nav" href="#oni-meet">👹<br>MEET</a>
-  <a href="#market">🛒<br>SHOP</a>
   <a href="#members">♙<br>MEMBERS</a>
   <a href="#apply">＋<br>JOIN</a>
 </div>
@@ -3498,6 +3524,7 @@ function renderMembersSafe(members){
     const count=sorted.length;
     $("memberCount").textContent=count;
     $("heroCount").textContent=count;
+    const appCount=$("oniAppMemberCount");if(appCount)appCount.textContent=count;
     $("memberProgress").style.width=Math.min(100,(count/52)*100)+"%";
     const compactCount=$("rosterCountCompact"),compactFill=$("rosterCapacityFill");
     if(compactCount)compactCount.textContent=count;
@@ -4374,7 +4401,7 @@ render();timer=setInterval(render,1000);
 <div class="oa-tools">
 <button class="oa-tool" data-oa="Манай clan хэдэн гишүүнтэй вэ?">👥 MEMBERS</button><button class="oa-tool" data-oa="Одоогийн meet ямар байна?">🏁 MEET</button><button class="oa-tool" data-oa="Garage дээр ямар машин байна?">🚗 GARAGE</button><button class="oa-tool" data-oa="Music дээр ямар дуу байна?">🎵 MUSIC</button><button class="oa-tool" data-oa="Дараагийн дууг тоглуул">⏭ NEXT</button>
 </div>
-<div class="oa-compose"><button class="oa-btn oa-mic" id="oaMic">🎙</button><button class="oa-btn oa-speaker" id="oaSpeaker">🔊</button><input class="oa-input" id="oaInput" placeholder="ONI AI-д асуу..." autocomplete="off" inputmode="text"><button class="oa-btn" id="oaSend">→</button></div>
+<div class="oa-compose"><button class="oa-btn oa-mic" id="oaMic" aria-label="Voice input">🎙</button><button class="oa-btn oa-speaker" id="oaSpeaker" aria-label="Read latest reply">🔊</button><input class="oa-input" id="oaInput" placeholder="ONI AI-д асуу..." autocomplete="off" inputmode="text"><button class="oa-btn" id="oaSend" aria-label="Send message">→</button></div>
 <div class="oa-hint" id="oaHint">🧠 Smart intent · 🎙 Voice · 🎵 Music tools · 🇲🇳 Монгол</div>
 </div></div>
 <script type="module" id="oni-ai-module">
@@ -4476,14 +4503,33 @@ sync().then(()=>add("ai","🟢 LIVE. Music control болон smart intent бэ�
   const dismiss = document.getElementById('oniPwaDismiss');
   const title = document.getElementById('oniPwaTitle');
   const copy = document.getElementById('oniPwaCopy');
+  const networkStatus = document.getElementById('oniNetworkStatus');
+  const meetStatus = document.getElementById('oniMeetStatus');
+  const appMeetStatus = document.getElementById('oniAppMeetStatus');
   let deferredInstall;
   const standalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
   const hidePrompt = () => prompt?.classList.remove('show');
-  const showPrompt = () => { if (!standalone && !localStorage.getItem('oniPwaDismissed')) prompt?.classList.add('show'); };
+  const wasDismissed = () => { try { return localStorage.getItem('oniPwaDismissed') === '1'; } catch { return false; } };
+  const showPrompt = () => { if (!standalone && !wasDismissed()) prompt?.classList.add('show'); };
+  const syncNetwork = () => {
+    const offline = !navigator.onLine;
+    networkStatus?.classList.toggle('show', offline);
+    document.documentElement.classList.toggle('oni-offline', offline);
+  };
+  const syncMeetStatus = () => {
+    if (!appMeetStatus || !meetStatus) return;
+    const status = meetStatus.textContent.trim();
+    appMeetStatus.textContent = status === 'LIVE NOW' ? 'Live now · join the event' : status === 'STARTING SOON' ? 'Starting soon' : 'Check live event';
+  };
 
   document.addEventListener('DOMContentLoaded', () => requestAnimationFrame(() => splash?.classList.add('is-ready')));
   setTimeout(() => splash?.classList.add('is-ready'), 1800);
-  dismiss?.addEventListener('click', () => { localStorage.setItem('oniPwaDismissed', '1'); hidePrompt(); });
+  syncNetwork();
+  window.addEventListener('online', syncNetwork);
+  window.addEventListener('offline', syncNetwork);
+  if (meetStatus && appMeetStatus) new MutationObserver(syncMeetStatus).observe(meetStatus, {childList: true, subtree: true, characterData: true});
+  syncMeetStatus();
+  dismiss?.addEventListener('click', () => { try { localStorage.setItem('oniPwaDismissed', '1'); } catch {} hidePrompt(); });
 
   window.addEventListener('beforeinstallprompt', event => {
     event.preventDefault();
