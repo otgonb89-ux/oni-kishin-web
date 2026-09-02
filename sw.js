@@ -1,4 +1,4 @@
-const CACHE_VERSION = 'oni-hub-v2';
+const CACHE_VERSION = 'oni-hub-v3';
 const SHELL_CACHE = `${CACHE_VERSION}-shell`;
 const RUNTIME_CACHE = `${CACHE_VERSION}-runtime`;
 const BASE_URL = new URL('./', self.registration.scope);

@@ -43,6 +43,7 @@ header .nav{height:calc(76px + env(safe-area-inset-top))}
 }
 @media(min-width:651px){.oni-app-dashboard{display:none}}
 @media(prefers-reduced-motion:reduce){.oni-app-card:active{transform:none}}
+#oniAI.is-busy #oaSend,#oniAI.is-busy .oa-tool{opacity:.58;cursor:wait}.oa-input:disabled{opacity:.7}
 </style>
 
 <style>
@@ -4136,7 +4137,7 @@ import { getApps, getApp, initializeApp } from "https://www.gstatic.com/firebase
 import { getFirestore, collection, doc, setDoc, serverTimestamp, onSnapshot, query, where } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore.js";
 const cfg={apiKey:"AIzaSyDt0DjUhafGZ2D-co3ZhZlIde_Qe1K5trw",authDomain:"oni-kishin-f59b4.firebaseapp.com",projectId:"oni-kishin-f59b4",storageBucket:"oni-kishin-f59b4.firebasestorage.app",messagingSenderId:"523789047478",appId:"1:523789047478:web:c7e250d094c38abe61f817"};
 const app=getApps().length?getApp():initializeApp(cfg),db=getFirestore(app),M=id=>document.getElementById(id),MEET="current",MAX=20;
-let meet=null,members=[],participants=[],pu=null,mu=null,memu=null,timer=null,joinedKey="",joinedMeetToken="";
+let meet=null,members=[],participants=[],pu=null,mu=null,memu=null,timer=null,joinedKey="",joinedMeetToken="",joining=false;
 const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;"}[c]));
 const pad=n=>String(Math.max(0,Math.floor(n))).padStart(2,"0");
 const remain=ms=>{let s=Math.max(0,Math.floor(ms/1000)),d=Math.floor(s/86400);s%=86400;let h=Math.floor(s/3600);s%=3600;let m=Math.floor(s/60);s%=60;return d?`${pad(d)}:${pad(h)}:${pad(m)}:${pad(s)}`:`${pad(h)}:${pad(m)}:${pad(s)}`};
@@ -4176,7 +4177,7 @@ function success(member,pos){M("oniMeetSuccessText").textContent=`${member.nick|
 function closeSuccess(){M("oniMeetSuccessOverlay").classList.remove("open");M("oniMeetSuccessOverlay").setAttribute("aria-hidden","true")}
 function launch(){const ios="https://apps.apple.com/app/car-parking-multiplayer/id1374868881",android="https://play.google.com/store/apps/details?id=com.olzhas.carparking.multyplayer";let hidden=false;const onHide=()=>{hidden=true;clearTimeout(f);document.removeEventListener("visibilitychange",onHide)};document.addEventListener("visibilitychange",onHide);const f=setTimeout(()=>{if(!hidden)location.href=/Android/i.test(navigator.userAgent)?android:ios},1200);try{location.href="carparkingmultiplayer://"}catch(e){clearTimeout(f);location.href=ios}}
 function findMember(nick,cpm){const n=nick.trim().toLowerCase(),id=cpm.trim().toLowerCase();return members.find(m=>String(m.nick??m.nickname??m.name??"").trim().toLowerCase()===n&&String(m.cpmid??m.cpmId??m.id??"").trim().toLowerCase()===id)}
-async function join(e){e.preventDefault();const er=M("oniMeetError"),nick=M("oniMeetNick").value.trim(),cpm=M("oniMeetCpmId").value.trim().toUpperCase();er.classList.remove("show");if(!nick||!cpm){er.textContent="Nick болон CPM ID хоёуланг нь оруулна уу.";er.classList.add("show");return}if(state()!=="live"){er.textContent=state()==="upcoming"?"Meet хараахан эхлээгүй байна.":"Meet дууссан байна.";er.classList.add("show");return}const member=findMember(nick,cpm);if(!member){er.textContent="Энэ Nick + CPM ID нь ONI Members roster-той таарахгүй байна.";er.classList.add("show");return}const meetToken=meetTokenOf(meet),k=member.id+"_"+MEET,max=Math.min(MAX,Number(meet.maxPlayers||MAX));if(participants.some(p=>p.id===k)){joinedKey=k;joinedMeetToken=meetToken;saveJoined();closeModal();render();success(member,participants.findIndex(p=>p.id===k)+1);return}if(participants.length>=max){er.textContent=`Meet дүүрсэн байна. ${max} / ${max}`;er.classList.add("show");return}try{await setDoc(doc(db,"meetParticipants",k),{meetId:MEET,meetStartAt:meet.startAt,memberId:member.id,nick:member.nick||member.nickname||member.name||nick,name:member.nick||member.nickname||member.name||nick,cpmId:member.cpmid||member.cpmId||cpm,joinedAt:serverTimestamp(),source:"website"});joinedKey=k;joinedMeetToken=meetToken;saveJoined();closeModal();render();success(member,participants.length+1)}catch(x){console.error("ONI Meet join:",x);er.textContent="Join хийхэд алдаа гарлаа. Firebase Rules эсвэл Meet-ийн төлөвийг шалгана уу.";er.classList.add("show")}}
+async function join(e){e.preventDefault();if(joining)return;const er=M("oniMeetError"),submit=e.currentTarget.querySelector('button[type="submit"]'),nick=M("oniMeetNick").value.trim(),cpm=M("oniMeetCpmId").value.trim().toUpperCase();er.classList.remove("show");if(!nick||!cpm){er.textContent="Nick болон CPM ID хоёуланг нь оруулна уу.";er.classList.add("show");return}if(state()!=="live"){er.textContent=state()==="upcoming"?"Meet хараахан эхлээгүй байна.":"Meet дууссан байна.";er.classList.add("show");return}const member=findMember(nick,cpm);if(!member){er.textContent="Энэ Nick + CPM ID нь ONI Members roster-той таарахгүй байна.";er.classList.add("show");return}const meetToken=meetTokenOf(meet),k=member.id+"_"+MEET,max=Math.min(MAX,Number(meet.maxPlayers||MAX));if(participants.some(p=>p.id===k)){joinedKey=k;joinedMeetToken=meetToken;saveJoined();closeModal();render();success(member,participants.findIndex(p=>p.id===k)+1);return}if(participants.length>=max){er.textContent=`Meet дүүрсэн байна. ${max} / ${max}`;er.classList.add("show");return}joining=true;if(submit){submit.disabled=true;submit.textContent="JOINING..."}try{await setDoc(doc(db,"meetParticipants",k),{meetId:MEET,meetStartAt:meet.startAt,memberId:member.id,nick:member.nick||member.nickname||member.name||nick,name:member.nick||member.nickname||member.name||nick,cpmId:member.cpmid||member.cpmId||cpm,joinedAt:serverTimestamp(),source:"website"});joinedKey=k;joinedMeetToken=meetToken;saveJoined();closeModal();render();success(member,participants.length+1)}catch(x){console.error("ONI Meet join:",x);er.textContent="Join хийхэд алдаа гарлаа. Firebase Rules эсвэл Meet-ийн төлөвийг шалгана уу.";er.classList.add("show")}finally{joining=false;if(submit){submit.disabled=false;submit.textContent="JOIN MEET"}}}
 M("oniMeetJoin").addEventListener("click",openModal);M("oniMeetForm").addEventListener("submit",join);document.querySelectorAll("[data-oni-meet-close]").forEach(x=>x.addEventListener("click",closeModal));M("oniMeetSuccessOpenCPM").addEventListener("click",launch);M("oniMeetSuccessClose").addEventListener("click",closeSuccess);document.addEventListener("keydown",e=>{if(e.key==="Escape"){closeModal();closeSuccess()}});
 memu=onSnapshot(collection(db,"members"),s=>{members=s.docs.map(d=>({id:d.id,...d.data()}))},e=>console.error("ONI Meet members:",e));
 mu=onSnapshot(doc(db,"meets",MEET),s=>{
@@ -4401,22 +4402,23 @@ render();timer=setInterval(render,1000);
 <div class="oa-tools">
 <button class="oa-tool" data-oa="Манай clan хэдэн гишүүнтэй вэ?">👥 MEMBERS</button><button class="oa-tool" data-oa="Одоогийн meet ямар байна?">🏁 MEET</button><button class="oa-tool" data-oa="Garage дээр ямар машин байна?">🚗 GARAGE</button><button class="oa-tool" data-oa="Music дээр ямар дуу байна?">🎵 MUSIC</button><button class="oa-tool" data-oa="Дараагийн дууг тоглуул">⏭ NEXT</button>
 </div>
-<div class="oa-compose"><button class="oa-btn oa-mic" id="oaMic" aria-label="Voice input">🎙</button><button class="oa-btn oa-speaker" id="oaSpeaker" aria-label="Read latest reply">🔊</button><input class="oa-input" id="oaInput" placeholder="ONI AI-д асуу..." autocomplete="off" inputmode="text"><button class="oa-btn" id="oaSend" aria-label="Send message">→</button></div>
+<div class="oa-compose"><button class="oa-btn oa-mic" id="oaMic" aria-label="Voice input">🎙</button><button class="oa-btn oa-speaker" id="oaSpeaker" aria-label="Read latest reply">🔊</button><input class="oa-input" id="oaInput" placeholder="ONI AI-д асуу..." autocomplete="off" inputmode="text" maxlength="2000"><button class="oa-btn" id="oaSend" aria-label="Send message">→</button></div>
 <div class="oa-hint" id="oaHint">🧠 Smart intent · 🎙 Voice · 🎵 Music tools · 🇲🇳 Монгол</div>
 </div></div>
 <script type="module" id="oni-ai-module">
 import {getApps,getApp,initializeApp} from "https://www.gstatic.com/firebasejs/12.17.1/firebase-app.js";
-import {getFirestore,collection,getDocs,doc,getDoc} from "https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore.js";
+import {getFirestore,collection,getDocs,doc,getDoc,query,limit} from "https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore.js";
 const cfg={apiKey:"AIzaSyDt0djUhafGZ2D-co3ZhZlIde_Qe1K5trw",authDomain:"oni-kishin-f59b4.firebaseapp.com",projectId:"oni-kishin-f59b4",storageBucket:"oni-kishin-f59b4.firebasestorage.app",messagingSenderId:"523789047478",appId:"1:523789047478:web:c7e250d094c38abe61f817"};
-const app=getApps().length?getApp():initializeApp(cfg),db=getFirestore(app),root=document.getElementById("oniAI"),body=document.getElementById("oaBody"),inp=document.getElementById("oaInput"),stateEl=document.getElementById("oaState"),hint=document.getElementById("oaHint");
-const D={members:[],garage:[],music:[],participants:[],meet:null},history=[];let ready=false,tracks=[],trackIndex=0,listening=false,recorder=null,chunks=[],audio=new Audio();
+const app=getApps().length?getApp():initializeApp(cfg),db=getFirestore(app),root=document.getElementById("oniAI"),body=document.getElementById("oaBody"),inp=document.getElementById("oaInput"),send=document.getElementById("oaSend"),stateEl=document.getElementById("oaState"),hint=document.getElementById("oaHint");
+const D={members:[],garage:[],music:[],participants:[],meet:null},history=[],MAX_UI_HISTORY=24;let ready=false,tracks=[],trackIndex=0,listening=false,recognition=null,audio=new Audio(),aiBusy=false;
 const ONI_AI_WORKER="https://oni-kishin-web.erkaa2323.workers.dev/api/oni-ai";
 
 
 const norm=s=>String(s||"").toLowerCase().replace(/[?.,!;:()[\]{}"'`]/g," ").replace(/\s+/g," ").trim(),any=(x,a)=>a.some(v=>x.includes(v)),txt=o=>Object.entries(o||{}).filter(([,v])=>typeof v==="string"||typeof v==="number").map(([k,v])=>k+" "+v).join(" ");
-function add(role,text){const d=document.createElement("div");d.className="oa-msg "+(role==="user"?"oa-user":"oa-ai");const l=document.createElement("div");l.className="oa-label";l.textContent=role==="user"?"YOU":"ONI AI";d.append(l,document.createTextNode(text));body.appendChild(d);body.scrollTop=body.scrollHeight;history.push({role,text})}
-async function read(name){try{const s=await getDocs(collection(db,name));return s.docs.map(d=>({id:d.id,...d.data()}))}catch(e){console.warn(name,e);return[]}}
-async function sync(){const [m,g,mu,p,me]=await Promise.all([read("members"),read("garage"),read("music"),read("meetParticipants"),getDoc(doc(db,"meets","current")).catch(()=>null)]);D.members=m;D.garage=g;D.music=mu;D.participants=p;D.meet=me&&me.exists()?{id:me.id,...me.data()}:null;tracks=D.music.filter(x=>x.url||x.file||x.audioUrl).filter(x=>String(x.status||"").toLowerCase()!=="hidden");ready=true;stateEl.innerHTML=`● <b>LIVE</b> · ${D.members.length} members · ${tracks.length} tracks`}
+function setAiBusy(value){aiBusy=value;root.classList.toggle("is-busy",value);inp.disabled=value;send.disabled=value;send.setAttribute("aria-busy",String(value));}
+function add(role,text){const d=document.createElement("div");d.className="oa-msg "+(role==="user"?"oa-user":"oa-ai");const l=document.createElement("div");l.className="oa-label";l.textContent=role==="user"?"YOU":"ONI AI";d.append(l,document.createTextNode(text));body.appendChild(d);history.push({role,text});if(history.length>MAX_UI_HISTORY)history.splice(0,history.length-MAX_UI_HISTORY);const messages=body.querySelectorAll(".oa-msg");for(let i=0;i<messages.length-MAX_UI_HISTORY;i+=1)messages[i].remove();body.scrollTop=body.scrollHeight}
+async function read(name,maximum=100){try{const s=await getDocs(query(collection(db,name),limit(maximum)));return s.docs.map(d=>({id:d.id,...d.data()}))}catch(e){console.warn(name,e);return[]}}
+async function sync(){const [m,g,mu,p,me]=await Promise.all([read("members"),read("garage"),read("music"),read("meetParticipants",25),getDoc(doc(db,"meets","current")).catch(()=>null)]);D.members=m;D.garage=g;D.music=mu;D.participants=p;D.meet=me&&me.exists()?{id:me.id,...me.data()}:null;tracks=D.music.filter(x=>x.url||x.file||x.audioUrl).filter(x=>String(x.status||"").toLowerCase()!=="hidden");ready=true;stateEl.innerHTML=`● <b>LIVE</b> · ${D.members.length} members · ${tracks.length} tracks`}
 function trackUrl(t){return t?.url||t?.file||t?.audioUrl||""}
 function showPlayer(){let old=body.querySelector(".oa-player");if(old)old.remove();if(!tracks.length)return;const t=tracks[trackIndex%tracks.length],box=document.createElement("div");box.className="oa-player";box.innerHTML=`<button class="oa-play" id="oaPlay">${audio.paused?"▶":"Ⅱ"}</button><div class="oa-track"><b>${String(t.title||t.name||"UNTITLED").replace(/[<>]/g,"")}</b><small>${String(t.artist||"ONI RADIO").replace(/[<>]/g,"")}</small><div class="oa-progress"><i id="oaProg"></i></div></div>`;body.appendChild(box);box.querySelector("#oaPlay").onclick=toggleMusic;audio.ontimeupdate=()=>{const p=box.querySelector("#oaProg");if(p&&audio.duration)p.style.width=audio.currentTime/audio.duration*100+"%"}} 
 function loadTrack(i,autoplay=true){if(!tracks.length){add("ai","Music дээр тоглуулах боломжтой дуу алга.");return}trackIndex=(i+tracks.length)%tracks.length;const u=trackUrl(tracks[trackIndex]);audio.src=u;showPlayer();if(autoplay)audio.play().then(showPlayer).catch(()=>add("ai","Дуу сонгогдлоо. ▶ товчийг дарж тоглуулаарай."))}
@@ -4427,7 +4429,7 @@ function smart(q){
  if(any(x,["дараагийн","next"]))return "__NEXT__";if(any(x,["өмнөх","previous"]))return "__PREV__";
  if(any(x,["pause","түр зогсоо","зогсоо"])&&any(x,["дуу","music","song","радио"]))return "__PAUSE__";
  if(any(x,["тоглуул","play","дуу тавь","дуу тоглуул"]))return "__PLAY__";
- if(any(x,["гишүүн","member","members","хэдэн хүн","гишүүд"]))return `Одоогийн roster: ${D.members.length} гишүүн.\n\n${D.members.slice(0,20).map((m,i)=>`${i+1}. ${m.nick||m.first||"—"} · ${m.cpmid||"—"}`).join("\n")}`;
+ if(any(x,["гишүүн","member","members","хэдэн хүн","гишүүд"]))return `Одоогийн roster: ${D.members.length} гишүүн.\n\n${D.members.slice(0,20).map((m,i)=>`${i+1}. ${m.nick||m.first||"—"}`).join("\n")}`;
  if(any(x,["kitsune"])&&any(x,["хэн","who","leader","ахлагч"])){const m=D.members.find(v=>norm(v.nick)==="kitsune");return m?"Kitsune нь ONI & KISHIN roster дээр бүртгэлтэй гишүүн/ахлагчийн нэр байна.":"Roster-оос Kitsune олдсонгүй."}
  if(any(x,["garage","машин","car","build"])){const a=D.garage.slice(0,15);return a.length?`Garage-д ${D.garage.length} record байна.\n\n${a.map((g,i)=>`${i+1}. ${g.name||g.title||g.car||g.model||g.brand||"Нэргүй build"}`).join("\n")}`:"Garage-д record алга."}
  if(any(x,["music","дуу","song","radio"])){return tracks.length?`Music дээр ${tracks.length} playable track байна.\n\n${tracks.slice(0,15).map((m,i)=>`${i+1}. ${m.title||m.name||"UNTITLED"} · ${m.artist||"ONI RADIO"}`).join("\n")}`:"Music дээр playable track алга."}
@@ -4438,9 +4440,11 @@ function smart(q){
 }
 function speak(t){if(!window.speechSynthesis){hint.textContent="🔊 Voice reply энэ browser дээр дэмжигдэхгүй байна.";return}speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang="mn-MN";u.rate=.95;speechSynthesis.speak(u)}
 async function aiBackend(q){
+ if(!navigator.onLine)return "⚠️ Та офлайн байна. Холболт сэргэсний дараа дахин оролдоно уу.";
+ let timer;
  try{
   const controller=new AbortController();
-  const timer=setTimeout(()=>controller.abort(),30000);
+  timer=setTimeout(()=>controller.abort(),30000);
   const r=await fetch(ONI_AI_WORKER,{
    method:"POST",
    headers:{"Content-Type":"application/json"},
@@ -4450,7 +4454,6 @@ async function aiBackend(q){
     history:history.slice(-10)
    })
   });
-  clearTimeout(timer);
   const j=await r.json().catch(()=>({}));
   if(!r.ok){
    const detail=j.detail||j.error||("HTTP "+r.status);
@@ -4459,13 +4462,12 @@ async function aiBackend(q){
   if(!j.reply&&!j.text) throw new Error("Backend reply хоосон ирлээ.");
   return j.reply||j.text;
  }catch(e){
-  clearTimeout(typeof timer==="undefined"?null:timer);
   console.error("ONI AI backend:",e);
-  return "⚠️ ONI AI backend холболтын алдаа: "+(e?.name==="AbortError"?"30 секундийн timeout":String(e?.message||e));
- }
+  return "⚠️ ONI AI одоогоор хариулах боломжгүй байна. "+(e?.name==="AbortError"?"30 секундийн дараа timeout боллоо.":"Холболтоо шалгаад дахин оролдоно уу.");
+ }finally{if(timer)clearTimeout(timer)}
 }
 async function ask(q){
- q=q.trim();if(!q)return;add("user",q);
+ q=q.trim();if(!q)return;if(aiBusy){hint.textContent="⏳ ONI AI өмнөх асуултад хариулж байна.";return}add("user",q);
  if(!ready){add("ai","LIVE data бэлэн болоогүй байна.");return}
  const r=smart(q);
  if(r==="__NEXT__"){nextTrack();add("ai",`⏭ ${tracks[trackIndex]?.title||tracks[trackIndex]?.name||"Дараагийн дуу"} тоглож байна.`);return}
@@ -4476,20 +4478,22 @@ async function ask(q){
  t.className="oa-msg oa-ai oa-typing";
  t.innerHTML='<div class="oa-label">ONI AI</div>Ухаалгаар боловсруулж байна...';
  body.appendChild(t);body.scrollTop=body.scrollHeight;
- const reply=await aiBackend(q);t.remove();add("ai",reply||r||"⚠️ ONI AI хариу өгөөгүй.");
+ setAiBusy(true);try{const reply=await aiBackend(q);add("ai",reply||r||"⚠️ ONI AI хариу өгөөгүй.")}finally{t.remove();setAiBusy(false)}
 }
-document.getElementById("oaOpen").onclick=()=>{root.classList.add("open");inp.focus()};document.getElementById("oaClose").onclick=()=>root.classList.remove("open");document.getElementById("oaSend").onclick=()=>{const v=inp.value;inp.value="";ask(v)};inp.onkeydown=e=>{if(e.key==="Enter"){const v=inp.value;inp.value="";ask(v)}};document.querySelectorAll("[data-oa]").forEach(b=>b.onclick=()=>ask(b.dataset.oa));document.getElementById("oaSpeaker").onclick=()=>{const msgs=[...body.querySelectorAll(".oa-msg.oa-ai")];const t=msgs.at(-1)?.innerText?.replace(/^ONI AI\s*/,"");if(t)speak(t)};
+document.getElementById("oaOpen").onclick=()=>{root.classList.add("open");inp.focus()};document.getElementById("oaClose").onclick=()=>root.classList.remove("open");send.onclick=()=>{const v=inp.value;inp.value="";ask(v)};inp.onkeydown=e=>{if(e.key==="Enter"&&!e.isComposing){e.preventDefault();const v=inp.value;inp.value="";ask(v)}};document.querySelectorAll("[data-oa]").forEach(b=>b.onclick=()=>ask(b.dataset.oa));document.getElementById("oaSpeaker").onclick=()=>{const msgs=[...body.querySelectorAll(".oa-msg.oa-ai")];const t=msgs.at(-1)?.innerText?.replace(/^ONI AI\s*/,"");if(t)speak(t)};
 
 document.getElementById("oaMic").onclick=async()=>{
- if(listening){recorder?.stop();return}
- if(!navigator.mediaDevices?.getUserMedia||!window.MediaRecorder){hint.textContent="🎙 Audio recording энэ browser дээр дэмжигдэхгүй байна.";return}
+ if(listening){recognition?.stop();return}
+ const SpeechRecognition=window.SpeechRecognition||window.webkitSpeechRecognition;
+ if(!SpeechRecognition){hint.textContent="🎙 Voice input энэ browser дээр дэмжигдэхгүй байна. Текстээр асуугаарай.";return}
  try{
-  const stream=await navigator.mediaDevices.getUserMedia({audio:true});chunks=[];recorder=new MediaRecorder(stream);recorder.ondataavailable=e=>{if(e.data.size)chunks.push(e.data)};
-  recorder.onstart=()=>{listening=true;document.getElementById("oaMic").classList.add("on");hint.textContent="🎙 Сонсож байна... дахин дарж дуусгана."};
-  recorder.onstop=async()=>{listening=false;document.getElementById("oaMic").classList.remove("on");stream.getTracks().forEach(t=>t.stop());const blob=new Blob(chunks,{type:recorder.mimeType||"audio/webm"});hint.textContent="⏳ Voice transcription backend шалгаж байна...";
-   try{const fd=new FormData();fd.append("audio",blob,"oni-voice.webm");const r=await fetch("/api/voice/transcribe",{method:"POST",body:fd});const j=await r.json();if(!r.ok)throw new Error(j.error||"failed");inp.value=j.text||"";hint.textContent=inp.value?"🎙 Текст бэлэн. → дарж асуу.":"Яриа танигдсангүй."}catch(e){console.error(e);hint.textContent="🎙 Voice transcription backend одоогоор тусдаа холбоос шаардлагатай."}
-  };recorder.start();
- }catch(e){console.error(e);hint.textContent=e.name==="NotAllowedError"?"🎙 Microphone permission denied. iPhone Settings → Safari → Microphone-оос зөвшөөрнө үү.":"🎙 Microphone нээж чадсангүй."}
+  recognition=new SpeechRecognition();recognition.lang="mn-MN";recognition.interimResults=false;recognition.maxAlternatives=1;
+  recognition.onstart=()=>{listening=true;document.getElementById("oaMic").classList.add("on");hint.textContent="🎙 Сонсож байна... дахин дарж дуусгана."};
+  recognition.onresult=e=>{inp.value=Array.from(e.results).map(r=>r[0]?.transcript||"").join(" ").trim();hint.textContent=inp.value?"🎙 Текст бэлэн. → дарж асуу.":"Яриа танигдсангүй."};
+  recognition.onerror=e=>{console.warn("ONI AI voice input:",e.error);hint.textContent=e.error==="not-allowed"?"🎙 Microphone permission denied. Browser settings-ээс зөвшөөрнө үү.":"🎙 Voice input алдаа гарлаа. Текстээр дахин оролдоно уу."};
+  recognition.onend=()=>{listening=false;document.getElementById("oaMic").classList.remove("on");recognition=null};
+  recognition.start();
+ }catch(e){console.error(e);hint.textContent="🎙 Voice input эхлүүлж чадсангүй. Текстээр дахин оролдоно уу."}
 };
 
 add("ai","Сайн уу. Би ONI AI. Монгол хэлээр асуугаарай — clan data, Meet, Garage, Music болон navigation-д тусална.");
@@ -4555,7 +4559,9 @@ sync().then(()=>add("ai","🟢 LIVE. Music control болон smart intent бэ�
 
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', async () => {
-      const registration = await navigator.serviceWorker.register('./sw.js', {scope: './'});
+      let registration;
+      try { registration = await navigator.serviceWorker.register('./sw.js', {scope: './'}); }
+      catch (error) { console.warn('ONI HUB service worker registration failed:', error); return; }
       registration.addEventListener('updatefound', () => {
         const worker = registration.installing;
         worker?.addEventListener('statechange', () => {

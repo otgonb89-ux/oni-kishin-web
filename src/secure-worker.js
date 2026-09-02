@@ -4,6 +4,7 @@ const DEFAULT_ORIGIN = 'https://erkaa2323-sudo.github.io';
 const WINDOW_MS = 60_000;
 const MAX_REQUESTS = 12;
 const MAX_BODY_BYTES = 16 * 1024;
+const MAX_TRACKED_CLIENTS = 10_000;
 const AI_PATH = '/api/oni-ai';
 const buckets = new Map();
 
@@ -25,7 +26,13 @@ function rateLimit(key) {
   const now = Date.now();
   for (const [bucketKey, value] of buckets) if (now - value.start >= WINDOW_MS) buckets.delete(bucketKey);
   const row = buckets.get(key);
-  if (!row) { buckets.set(key, {start: now, count: 1}); return null; }
+  if (!row) {
+    // Rate limiting is intentionally best-effort per Worker isolate. Bound the
+    // in-memory map so a flood of unique IPs cannot grow it without limit.
+    if (buckets.size >= MAX_TRACKED_CLIENTS) buckets.delete(buckets.keys().next().value);
+    buckets.set(key, {start: now, count: 1});
+    return null;
+  }
   row.count += 1;
   return row.count > MAX_REQUESTS ? Math.max(1, Math.ceil((WINDOW_MS - (now - row.start)) / 1000)) : null;
 }

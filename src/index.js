@@ -4,6 +4,7 @@ const MAX_MESSAGE_CHARS = 2_000;
 const MAX_HISTORY_ITEMS = 10;
 const MAX_HISTORY_CHARS = 1_000;
 const MAX_TOOL_ROUNDS = 2;
+const MAX_TOOL_CALLS_PER_ROUND = 2;
 const UPSTREAM_TIMEOUT_MS = 20_000;
 class RequestValidationError extends Error {}
 
@@ -49,6 +50,12 @@ async function currentMeet() {
 }
 function clippedText(value, maximum) {
   return typeof value === 'string' ? value.trim().slice(0, maximum) : '';
+}
+function requiredText(value, maximum, label) {
+  if (typeof value !== 'string') throw new RequestValidationError(`Invalid ${label}`);
+  const text = value.trim();
+  if (!text || text.length > maximum) throw new RequestValidationError(`Invalid ${label}`);
+  return text;
 }
 function memberView(member) {
   return {nick: clippedText(member.nick || member.nickname, 48), name: clippedText(member.name, 96), role: clippedText(member.role, 32), title: clippedText(member.title, 48), clan: clippedText(member.clan, 48)};
@@ -133,8 +140,7 @@ function validatedHistory(input) {
   if (!Array.isArray(input) || input.length > MAX_HISTORY_ITEMS) throw new RequestValidationError('Invalid conversation history');
   return input.map(item => {
     if (!item || typeof item !== 'object' || Array.isArray(item) || !['user', 'ai'].includes(item.role) || !Object.keys(item).every(key => key === 'role' || key === 'text')) throw new RequestValidationError('Invalid conversation history');
-    const text = clippedText(item.text, MAX_HISTORY_CHARS);
-    if (!text) throw new RequestValidationError('Invalid conversation history');
+    const text = requiredText(item.text, MAX_HISTORY_CHARS, 'conversation history');
     return {role: item.role === 'ai' ? 'assistant' : 'user', content: text};
   });
 }
@@ -151,12 +157,11 @@ export default {
     try {
       if (!input || typeof input !== 'object' || Array.isArray(input)) return json({ok: false, error: 'Invalid JSON object'}, 400);
       if (!Object.keys(input).every(key => key === 'message' || key === 'history')) return json({ok: false, error: 'Unexpected request field'}, 400);
-      const message = clippedText(input.message, MAX_MESSAGE_CHARS);
-      if (!message) return json({ok: false, error: 'message is required'}, 400);
+      const message = requiredText(input.message, MAX_MESSAGE_CHARS, 'message');
       const history = validatedHistory(input.history);
       let response = await callOpenAI({model: String(env.ONI_MODEL || 'gpt-5.6-luna').trim(), reasoning: {effort: 'low'}, instructions: SYSTEM, input: [...history, {role: 'user', content: message}], tools, max_output_tokens: 600}, env);
       for (let round = 0; round < MAX_TOOL_ROUNDS; round += 1) {
-        const calls = (response.output || []).filter(item => item.type === 'function_call').slice(0, 3);
+        const calls = (response.output || []).filter(item => item.type === 'function_call').slice(0, MAX_TOOL_CALLS_PER_ROUND);
         if (!calls.length) break;
         const outputs = [];
         for (const call of calls) {

@@ -69,3 +69,16 @@ test('AI handler rejects unexpected fields and malformed history before upstream
   assert.equal(malformedHistory.status, 400);
   assert.equal((await malformedHistory.json()).error, 'Invalid request');
 });
+
+test('AI handler rejects oversized message and history fields instead of silently truncating them', async () => {
+  const oversizedMessage = await app.fetch(new Request('https://worker.example/api/oni-ai', {
+    method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({message: 'x'.repeat(2_001)})
+  }), {});
+  assert.equal(oversizedMessage.status, 400);
+  assert.equal((await oversizedMessage.json()).error, 'Invalid request');
+  const oversizedHistory = await app.fetch(new Request('https://worker.example/api/oni-ai', {
+    method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({message: 'hello', history: [{role: 'user', text: 'x'.repeat(1_001)}]})
+  }), {});
+  assert.equal(oversizedHistory.status, 400);
+  assert.equal((await oversizedHistory.json()).error, 'Invalid request');
+});

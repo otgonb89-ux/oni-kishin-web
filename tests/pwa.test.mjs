@@ -25,14 +25,17 @@ test('tracked HTML contains PWA metadata and relative worker registration', asyn
 
 test('mobile app layer keeps quick navigation, safe areas, and offline feedback in tracked HTML', async () => {
   const html = await text('index.html');
-  for (const value of ['oni-app-dashboard', 'oniNetworkStatus', 'env(safe-area-inset-bottom)', 'oniAppMemberCount', 'oniAppMeetStatus', 'oniIntroSeen', 'aria-label="Voice input"']) assert.match(html, new RegExp(value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
+  const appFiles = html + await text('admin.html');
+  for (const value of ['oni-app-dashboard', 'oniNetworkStatus', 'env(safe-area-inset-bottom)', 'oniAppMemberCount', 'oniAppMeetStatus', 'oniIntroSeen', 'aria-label="Voice input"', 'maxlength="2000"', 'MAX_UI_HISTORY=24', 'setAiBusy(true)', 'onIdTokenChanged', 'SpeechRecognition']) assert.match(appFiles, new RegExp(value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
+  assert.doesNotMatch(html, /\/api\/voice\/transcribe/);
+  assert.doesNotMatch(appFiles, /getIdTokenResult\(true\)/);
   assert.match(html, /href="#oni-meet"/);
   assert.match(html, /href="admin\.html"/);
 });
 
 test('service worker versions caches and includes offline navigation fallback', async () => {
   const worker = await text('sw.js');
-  assert.match(worker, /CACHE_VERSION = 'oni-hub-v2'/);
+  assert.match(worker, /CACHE_VERSION = 'oni-hub-v3'/);
   assert.match(worker, /offline\.html/);
   assert.match(worker, /networkFirst\(request, asset\('offline\.html'\)\)/);
   assert.match(worker, /SKIP_WAITING/);
